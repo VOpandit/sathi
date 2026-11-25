@@ -1,423 +1,2150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sathi Demo — Share What You Can. Support Who Needs.</title>
-  <style>
-    :root {
-      --primary: #1e3a8a;
-      --emerald: #059669;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --muted: #64748b;
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
-    nav {
-      background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
-      position: sticky; top: 0; z-index: 20;
-    }
-    .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .container { max-width: 1200px; margin: 22px auto; padding: 0 16px; }
-    .hero {
-      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
-      color: #fff; border-radius: 16px; padding: 36px 28px; margin-bottom: 22px;
-      display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; align-items: center;
-    }
-    .hero h1 { margin: 0 0 10px; font-size: 32px; line-height: 1.2; }
-    .hero p { color: #cbd5e1; margin: 0 0 18px; line-height: 1.6; }
-    .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 22px; }
-    .pillar { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
-    .pillar h3 { margin: 0 0 6px; font-size: 15px; }
-    .pillar p { margin: 0; font-size: 12.5px; color: var(--muted); }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(15,23,42,0.04); }
-    .dash-grid { display: grid; grid-template-columns: 330px 1fr; gap: 18px; }
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .kpi { background: #fff; border: 1px solid var(--border); border-left: 5px solid var(--primary); border-radius: 10px; padding: 14px; }
-    .kpi .num { font-size: 26px; font-weight: 800; margin-top: 4px; }
-    input, select, textarea, button { padding: 8px 11px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13.5px; font-family: inherit; }
-    textarea { width: 100%; }
-    button { background: var(--primary); color: #fff; border: none; font-weight: 600; cursor: pointer; }
-    button:hover { background: #1d4ed8; }
-    button.emerald { background: var(--emerald); }
-    button.emerald:hover { background: #047857; }
-    button.secondary { background: #475569; }
-    button.danger { background: #dc2626; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: left; font-size: 13px; }
-    th { background: #f1f5f9; }
-    .badge { padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; display: inline-block; }
-    .b-offer { background: #dcfce7; color: #166534; }
-    .b-need { background: #fef3c7; color: #92400e; }
-    .b-open { background: #dbeafe; color: #1e40af; }
-    .b-prog { background: #ffedd5; color: #9a3412; }
-    .b-done { background: #e2e8f0; color: #334155; }
-    .wa-box { background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 14px; margin-top: 14px; }
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.55); display: flex; align-items: center; justify-content: center; z-index: 50; }
-    .modal-card { background: #fff; border-radius: 14px; padding: 22px; max-width: 440px; width: 92%; }
-    .hidden { display: none !important; }
-    @media (max-width: 880px) { .hero, .dash-grid { grid-template-columns: 1fr; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sathi — Share What You Can. Support Who Needs.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes heartBurst {
+            0% { transform: scale(0.3); opacity: 0; }
+            45% { transform: scale(1.25); opacity: 1; }
+            80% { transform: scale(0.95); opacity: 1; }
+            100% { transform: scale(1.1); opacity: 0; }
+        }
+        .animate-heart-burst {
+            animation: heartBurst 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popLike {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+        .animate-pop-like {
+            animation: popLike 0.28s ease-out;
+        }
+    </style>
 </head>
-<body>
-  <nav>
-    <div class="brand" onclick="showView('homeView')">
-      <svg width="36" height="36" viewBox="0 0 48 48" fill="none">
-        <rect width="48" height="48" rx="12" fill="#EFF6FF"/>
-        <path d="M14 27C14 21 20 17 24 22C28 17 34 21 34 27C34 33 24 38 24 38C24 38 14 33 14 27Z" fill="#059669"/>
-        <path d="M11 25C11 18 17 14 24 14C31 14 37 18 37 25" stroke="#1E3A8A" stroke-width="3.2" stroke-linecap="round"/>
-        <circle cx="24" cy="11" r="3" fill="#F59E0B"/>
-      </svg>
-      <div>
-        <div style="font-size:19px; font-weight:800; color:#1e3a8a;">Sathi</div>
-        <div style="font-size:11px; color:#64748b;">Share What You Can. Support Who Needs.</div>
-      </div>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <!-- Toast Notification Container (Replaces alert) -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 hidden transition-all duration-300">
+        <div class="bg-slate-900 text-white px-4 py-3.5 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-sm max-w-md">
+            <span id="toastIcon" class="text-emerald-400 font-bold text-base">✓</span>
+            <span id="toastText" class="leading-snug">Notification</span>
+        </div>
     </div>
 
-    <div id="guestNav" style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="secondary" onclick="showView('homeView')">Home</button>
-      <button onclick="openWaModal()">WhatsApp Alert Demo</button>
-      <button onclick="showView('authView')">Login / Register</button>
-      <button class="emerald" onclick="quickDemoLogin('Needy')">Demo: Needy</button>
-      <button onclick="quickDemoLogin('Helper')">Demo: Helper</button>
-      <button class="secondary" onclick="quickDemoLogin('Admin')">Demo: Admin</button>
+    <!-- ===================================================================== -->
+    <!-- WHATSAPP ALERT PREVIEW MODAL                                          -->
+    <!-- ===================================================================== -->
+    <div id="whatsappModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden fade-in">
+            <!-- WhatsApp Top Header -->
+            <div class="bg-[#075E54] text-white px-4 py-3.5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-white p-1 flex items-center justify-center shadow-inner">
+                        <svg viewBox="0 0 48 48" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="22" fill="#0F172A"/>
+                            <path d="M13 26C13 20 18.5 16 24 21.5C29.5 16 35 20 35 26C35 32.5 24 38 24 38C24 38 13 32.5 13 26Z" fill="#10B981"/>
+                            <path d="M10 25C10 17.5 16.5 11.5 24 11.5C27.5 11.5 30.7 12.9 33.1 15.1" stroke="#34D399" stroke-width="3.2" stroke-linecap="round"/>
+                            <path d="M38 23C38 30.5 31.5 36.5 24 36.5C20.5 36.5 17.3 35.1 14.9 32.9" stroke="#818CF8" stroke-width="3.2" stroke-linecap="round"/>
+                            <circle cx="24" cy="14" r="2.5" fill="#FBBF24"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold leading-tight">Sathi Community Bot • Kothrud</h3>
+                        <p class="text-[11px] text-emerald-200">Online • Instant Photo &amp; Locality Alerts</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeWhatsappModal()" class="text-white/80 hover:text-white text-lg font-bold px-2 py-1 rounded-lg cursor-pointer">
+                    ✕
+                </button>
+            </div>
+
+            <!-- WhatsApp Chat Wallpaper Area -->
+            <div class="bg-[#ECE5DD] p-4 space-y-3 max-h-[410px] overflow-y-auto">
+                <div class="text-center">
+                    <span class="bg-white/90 text-slate-600 text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-2xs">
+                        TODAY • SATHI VISUAL ALERT
+                    </span>
+                </div>
+
+                <!-- Incoming Alert Bubble with Visual Card -->
+                <div class="bg-white rounded-2xl rounded-tl-none p-3 shadow-xs border border-slate-200/60 text-xs text-slate-800 space-y-2 max-w-[92%]">
+                    <div class="font-bold text-[#075E54] flex items-center justify-between">
+                        <span>🍱 FoodShare Photo Alert Nearby!</span>
+                        <span class="text-[10px] text-slate-400 font-normal">09:42 PM</span>
+                    </div>
+                    <div id="waModalPhotoPreview" class="rounded-xl overflow-hidden border border-slate-200 h-28 bg-slate-100"></div>
+                    <p><strong>Item:</strong> 2 plates of veg rice remaining from family function</p>
+                    <p><strong>Area:</strong> Kothrud, Pune (MIT Gate 2) • Valid till 11:00 PM</p>
+                    <p class="text-slate-600">Claim on Sathi feed &amp; unlock Helper's WhatsApp + 4-digit Pickup PIN.</p>
+                </div>
+
+                <!-- Outgoing Claim Confirmation Bubble -->
+                <div class="bg-[#DCF8C6] rounded-2xl rounded-tr-none p-3.5 shadow-xs border border-emerald-200 text-xs text-slate-800 space-y-1 ml-auto max-w-[90%]">
+                    <div class="font-bold text-emerald-900 flex items-center justify-between">
+                        <span>You (Priya S.)</span>
+                        <span class="text-[10px] text-emerald-700 font-normal">09:44 PM ✓✓</span>
+                    </div>
+                    <p>Claimed Offer #101 on Sathi! Heading to MIT Gate 2 with Pickup PIN <strong>4829</strong>. Thank you!</p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-50 px-4 py-3 border-t border-slate-200 flex items-center justify-between gap-2">
+                <span class="text-[11px] text-slate-500">Privacy protected until claimed</span>
+                <button type="button" onclick="closeWhatsappModal(); quickDemoLogin('needy');" class="px-3.5 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 text-xs font-bold rounded-xl shadow-2xs transition-colors cursor-pointer">
+                    Try Feed Demo Now →
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div id="userNav" class="hidden" style="display:flex; gap:10px; align-items:center;">
-      <span id="navRole" class="badge b-open"></span>
-      <strong id="navName"></strong>
-      <button class="secondary" onclick="logout()">Logout</button>
-    </div>
-  </nav>
+    <!-- ===================================================================== -->
+    <!-- STICKY TOP NAVBAR WITH CUSTOM "SATHI" SVG LOGO & INSTANT DEMO LOGINS  -->
+    <!-- ===================================================================== -->
+    <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <!-- Sathi Brand Logo (Returns to Home when clicked) -->
+            <button type="button" onclick="goHome()" class="flex items-center gap-3 text-left cursor-pointer group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-indigo-500/25 border border-emerald-400/35 p-1.5 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform">
+                    <svg viewBox="0 0 48 48" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Sathi Logo">
+                        <defs>
+                            <linearGradient id="sathiHeartGrad" x1="13" y1="18" x2="35" y2="38" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#34D399"/>
+                                <stop offset="100%" stop-color="#0D9488"/>
+                            </linearGradient>
+                            <linearGradient id="sathiArcTop" x1="10" y1="11" x2="33" y2="25" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#6EE7B7"/>
+                                <stop offset="100%" stop-color="#10B981"/>
+                            </linearGradient>
+                            <linearGradient id="sathiArcBottom" x1="15" y1="23" x2="38" y2="37" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#818CF8"/>
+                                <stop offset="100%" stop-color="#6366F1"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M9.5 25.5C9.5 17.5 16 11 24 11C27.7 11 31.1 12.4 33.7 14.7" stroke="url(#sathiArcTop)" stroke-width="3.4" stroke-linecap="round"/>
+                        <path d="M38.5 22.5C38.5 30.5 32 37 24 37C20.3 37 16.9 35.6 14.3 33.3" stroke="url(#sathiArcBottom)" stroke-width="3.4" stroke-linecap="round"/>
+                        <path d="M14.5 25.2C14.5 20.4 19.3 17.2 24 21.8C28.7 17.2 33.5 20.4 33.5 25.2C33.5 30.8 24 35.8 24 35.8C24 35.8 14.5 30.8 14.5 25.2Z" fill="url(#sathiHeartGrad)"/>
+                        <circle cx="24" cy="14.2" r="2.4" fill="#FBBF24"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-emerald-100 to-emerald-300 bg-clip-text text-transparent">
+                            Sathi
+                        </span>
+                        <span class="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                            Visual Feed
+                        </span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-slate-300 font-medium">Share What You Can. Support Who Needs.</p>
+                </div>
+            </button>
 
-  <div class="container">
-    <!-- HOME VIEW -->
-    <div id="homeView">
-      <div class="hero">
-        <div>
-          <span class="badge b-offer" style="margin-bottom:10px;">Student Interactive Demo</span>
-          <h1>Share What You Can.<br>Support Who Needs.</h1>
-          <p>
-            Sathi helps neighbors share surplus food (such as <strong>2 plates of rice left over from an event</strong>),
-            study books, clothes, elderly care, and urgent help with people nearby.
-          </p>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="emerald" onclick="goAuthRole('Needy')">Sign Up / Login as Needy</button>
-            <button onclick="goAuthRole('Helper')">Sign Up / Login as Helper</button>
-            <button class="secondary" onclick="goAuthRole('Admin')">Open Admin Monitor</button>
-          </div>
+            <!-- Logged-Out Navigation Controls -->
+            <div id="navLoggedOut" class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <button type="button" onclick="goHome()" class="px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-colors cursor-pointer">
+                    Home
+                </button>
+                <button type="button" onclick="openWhatsappModal()" class="px-2.5 py-1.5 text-xs font-medium text-emerald-300 hover:text-emerald-200 transition-colors cursor-pointer flex items-center gap-1">
+                    <span>💬</span> WhatsApp Alert
+                </button>
+                <button type="button" onclick="openAuth('login')" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-xl transition-colors cursor-pointer">
+                    Login / Register
+                </button>
+                <div class="hidden md:flex items-center gap-1.5 pl-2 border-l border-slate-700">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Instant Demo:</span>
+                    <button type="button" onclick="quickDemoLogin('needy')" class="px-2.5 py-1.5 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg transition-colors cursor-pointer">
+                        🙋 Needy
+                    </button>
+                    <button type="button" onclick="quickDemoLogin('helper')" class="px-2.5 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors cursor-pointer">
+                        🍱 Helper
+                    </button>
+                    <button type="button" onclick="quickDemoLogin('admin')" class="px-2.5 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors cursor-pointer">
+                        📊 Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logged-In Navigation Controls -->
+            <div id="navLoggedIn" class="hidden flex flex-wrap items-center gap-2 sm:gap-2.5">
+                <button type="button" onclick="goHome()" class="px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white transition-colors cursor-pointer">
+                    Home
+                </button>
+                <button type="button" onclick="openWhatsappModal()" class="px-2.5 py-1.5 text-xs font-medium text-emerald-300 hover:text-emerald-200 transition-colors cursor-pointer">
+                    💬 WhatsApp
+                </button>
+                <button type="button" onclick="redirectToRoleDashboard(currentUser.role)" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl transition-colors cursor-pointer">
+                    My Dashboard
+                </button>
+                <span id="navRoleBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                    NEEDY: Priya S.
+                </span>
+                <button type="button" onclick="logout()" class="px-3 py-1.5 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-2xs transition-colors cursor-pointer">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: PUBLIC HOME PAGE                                              -->
+    <!-- ===================================================================== -->
+    <main id="viewHome" class="flex-1 fade-in">
+
+        <!-- HERO SECTION -->
+        <section class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white pt-10 pb-14 px-4 border-b border-slate-800">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <!-- Left Hero Copy -->
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold">
+                        <svg viewBox="0 0 48 48" class="w-4 h-4 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.5 25.5C9.5 17.5 16 11 24 11C27.7 11 31.1 12.4 33.7 14.7" stroke="#34D399" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M38.5 22.5C38.5 30.5 32 37 24 37C20.3 37 16.9 35.6 14.3 33.3" stroke="#818CF8" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M14.5 25.2C14.5 20.4 19.3 17.2 24 21.8C28.7 17.2 33.5 20.4 33.5 25.2C33.5 30.8 24 35.8 24 35.8C24 35.8 14.5 30.8 14.5 25.2Z" fill="#10B981"/>
+                            <circle cx="24" cy="14.2" r="2.8" fill="#FBBF24"/>
+                        </svg>
+                        <span>Sathi • Instagram-Style Visual Community Sharing</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                        Share What You Can.<br>
+                        <span class="text-emerald-400">Support Who Needs.</span>
+                    </h1>
+
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+                        Snap a photo of <strong>2 extra plates of veg rice from an event</strong>, Class 10 textbooks, clean winter sweaters, or elderly assistance—and post it on <strong>Sathi's visual community feed</strong> so neighbors in need can verify, claim, and coordinate on WhatsApp within minutes.
+                    </p>
+
+                    <!-- Primary Sign Up & Instant Demo Buttons -->
+                    <div class="pt-1 flex flex-wrap items-center gap-3">
+                        <button type="button" onclick="quickDemoLogin('needy')" class="px-5 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer flex items-center gap-2">
+                            <span>🙋</span> Demo: Needy Feed
+                        </button>
+                        <button type="button" onclick="quickDemoLogin('helper')" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer flex items-center gap-2">
+                            <span>🍱</span> Demo: Helper Photo Post
+                        </button>
+                        <button type="button" onclick="quickDemoLogin('admin')" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer flex items-center gap-2">
+                            <span>📊</span> Demo: Admin Monitor
+                        </button>
+                        <button type="button" onclick="openAuth('login')" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 text-sm font-semibold rounded-xl transition-all cursor-pointer">
+                            Login / Sign Up →
+                        </button>
+                    </div>
+
+                    <!-- Trust Strip -->
+                    <div class="pt-2 flex flex-wrap items-center gap-5 text-xs text-slate-400">
+                        <div class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold">✓</span> Photo-Verified Listings</div>
+                        <div class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold">✓</span> Double-Tap Heart Appreciation</div>
+                        <div class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold">✓</span> 4-Digit Pickup PIN</div>
+                    </div>
+                </div>
+
+                <!-- Right Hero Instagram-Style Feed Card Preview -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white text-slate-800 rounded-3xl shadow-2xl border border-slate-700/40 overflow-hidden max-w-md mx-auto">
+                        <!-- Mini Insta Header -->
+                        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                                    RK
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-slate-900">Rohan K.</span>
+                                        <span class="px-1.5 py-0.2 text-[9px] font-bold uppercase rounded bg-emerald-100 text-emerald-800">HELPER</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-500">Kothrud, Pune • 2 mins ago</div>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                🍱 FoodShare
+                            </span>
+                        </div>
+
+                        <!-- Visual Photo Preview -->
+                        <div id="heroSamplePhoto" class="w-full h-44 bg-slate-100 overflow-hidden"></div>
+
+                        <!-- Caption & Action -->
+                        <div class="p-4 space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3 text-xs font-semibold text-slate-700">
+                                    <span class="text-rose-500 font-bold">❤️ 18 appreciations</span>
+                                    <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full text-[11px]">● Open</span>
+                                </div>
+                                <button type="button" onclick="quickDemoLogin('needy')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition-colors cursor-pointer">
+                                    Claim on Feed →
+                                </button>
+                            </div>
+                            <p class="text-xs text-slate-700 leading-relaxed">
+                                <strong class="text-slate-900">Rohan K.</strong> 2 plates of fresh veg jeera rice remaining from our family event. Packed cleanly, valid until 11:00 PM tonight!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FIVE COMMUNITY PILLARS SECTION -->
+        <section class="max-w-7xl mx-auto px-4 pt-12 pb-6">
+            <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Our 5 Core Pillars</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Five Ways Sathi Connects Neighbors</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-500 max-w-md">
+                    Every photo post and help request is organized into five clear community categories.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Pillar 1 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-2xl flex items-center justify-center mb-3 border border-emerald-100">🍱</div>
+                        <h3 class="text-base font-bold text-slate-900">FoodShare</h3>
+                        <p class="text-xs font-semibold text-emerald-700 mt-0.5">Extra food share karne</p>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                            Share surplus meals from family events, weddings, or home kitchens with Veg/Non-Veg &amp; pickup time tags.
+                        </p>
+                    </div>
+                    <button type="button" onclick="quickDemoLogin('helper')" class="mt-4 text-xs font-bold text-emerald-700 hover:text-emerald-800 text-left cursor-pointer">
+                        Share Food Photo →
+                    </button>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="w-11 h-11 rounded-2xl bg-blue-50 text-2xl flex items-center justify-center mb-3 border border-blue-100">📚</div>
+                        <h3 class="text-base font-bold text-slate-900">EduBridge</h3>
+                        <p class="text-xs font-semibold text-blue-700 mt-0.5">Books ani study material share karne</p>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                            Pass on Class 10/12 textbooks, engineering guides, notebooks, and stationery to students nearby.
+                        </p>
+                    </div>
+                    <button type="button" onclick="quickDemoLogin('needy')" class="mt-4 text-xs font-bold text-blue-700 hover:text-blue-800 text-left cursor-pointer">
+                        Browse Study Material →
+                    </button>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-amber-300 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="w-11 h-11 rounded-2xl bg-amber-50 text-2xl flex items-center justify-center mb-3 border border-amber-100">👕</div>
+                        <h3 class="text-base font-bold text-slate-900">NeedNotWaste</h3>
+                        <p class="text-xs font-semibold text-amber-700 mt-0.5">Clothes ani useful items donate karne</p>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                            Give clean winter sweaters, kids' wear, bags, and household essentials a second life with dignity.
+                        </p>
+                    </div>
+                    <button type="button" onclick="quickDemoLogin('helper')" class="mt-4 text-xs font-bold text-amber-700 hover:text-amber-800 text-left cursor-pointer">
+                        Donate Useful Items →
+                    </button>
+                </div>
+
+                <!-- Pillar 4 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-purple-300 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="w-11 h-11 rounded-2xl bg-purple-50 text-2xl flex items-center justify-center mb-3 border border-purple-100">👵</div>
+                        <h3 class="text-base font-bold text-slate-900">CareConnect</h3>
+                        <p class="text-xs font-semibold text-purple-700 mt-0.5">Elderly lokanna basic assistance</p>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                            Help senior citizens with pharmacy pickups, grocery errands, bank visits, or clinic accompaniment.
+                        </p>
+                    </div>
+                    <button type="button" onclick="quickDemoLogin('helper')" class="mt-4 text-xs font-bold text-purple-700 hover:text-purple-800 text-left cursor-pointer">
+                        Offer Elder Care →
+                    </button>
+                </div>
+
+                <!-- Pillar 5 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-rose-300 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="w-11 h-11 rounded-2xl bg-rose-50 text-2xl flex items-center justify-center mb-3 border border-rose-100">🤝</div>
+                        <h3 class="text-base font-bold text-slate-900">HelpHub</h3>
+                        <p class="text-xs font-semibold text-rose-700 mt-0.5">General help requests</p>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                            Request or fulfill urgent medicines, direct school/medical bill support, and neighborhood emergencies.
+                        </p>
+                    </div>
+                    <button type="button" onclick="quickDemoLogin('needy')" class="mt-4 text-xs font-bold text-rose-700 hover:text-rose-800 text-left cursor-pointer">
+                        Explore HelpHub →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHATSAPP COMMUNITY COORDINATION SHOWCASE -->
+        <section class="max-w-7xl mx-auto px-4 py-10 pb-14">
+            <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 rounded-3xl p-6 sm:p-10 shadow-2xs">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#25D366]/20 text-[#075E54] text-xs font-bold border border-[#25D366]/40">
+                            <span>💬</span> Sathi WhatsApp Community Bridge
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                            From Visual Feed Post to <span class="text-[#128C7E]">WhatsApp Handover</span> in 3 Taps
+                        </h2>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            When a Helper uploads a photo of extra food or books, Sathi broadcasts an instant locality alert on WhatsApp. Once a Needy member claims the post on Sathi, private contact info and a 4-digit Pickup PIN unlock automatically.
+                        </p>
+
+                        <div class="pt-2 flex flex-wrap items-center gap-3">
+                            <button type="button" onclick="openWhatsappModal()" class="px-5 py-2.5 bg-[#128C7E] hover:bg-[#075E54] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition-colors cursor-pointer flex items-center gap-2">
+                                <span>📱</span> Preview Live WhatsApp Alert
+                            </button>
+                            <button type="button" onclick="openAuth('signup')" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs sm:text-sm font-semibold rounded-xl transition-colors cursor-pointer">
+                                Sign Up with Your WhatsApp
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-2xs">
+                            <div class="text-xl mb-1">📸</div>
+                            <h3 class="text-xs font-bold text-slate-900">1. Photo Proof</h3>
+                            <p class="text-[11px] text-slate-600 mt-1">Helpers attach real photos with quantity &amp; freshness details.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-2xs">
+                            <div class="text-xl mb-1">🔔</div>
+                            <h3 class="text-xs font-bold text-slate-900">2. Instant Alert</h3>
+                            <p class="text-[11px] text-slate-600 mt-1">Nearby Needy users see smart locality matches immediately.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-2xs">
+                            <div class="text-xl mb-1">🔒</div>
+                            <h3 class="text-xs font-bold text-slate-900">3. Safe Unlock</h3>
+                            <p class="text-[11px] text-slate-600 mt-1">Phone &amp; WhatsApp link unlock only after claiming.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-2xs">
+                            <div class="text-xl mb-1">🔢</div>
+                            <h3 class="text-xs font-bold text-slate-900">4. 4-Digit PIN</h3>
+                            <p class="text-[11px] text-slate-600 mt-1">Verify PIN on pickup &amp; update Admin impact stats.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: LOGIN & SIGN UP VIEW (Automatic Role-Based Redirect)          -->
+    <!-- ===================================================================== -->
+    <main id="viewAuth" class="hidden flex-1 flex items-center justify-center p-4 sm:p-8 fade-in">
+        <div class="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+            <!-- Auth Card Header -->
+            <div class="bg-slate-900 px-6 py-5 text-white flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/35 p-1.5 flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 48 48" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.5 25.5C9.5 17.5 16 11 24 11C27.7 11 31.1 12.4 33.7 14.7" stroke="#34D399" stroke-width="3.6" stroke-linecap="round"/>
+                            <path d="M38.5 22.5C38.5 30.5 32 37 24 37C20.3 37 16.9 35.6 14.3 33.3" stroke="#818CF8" stroke-width="3.6" stroke-linecap="round"/>
+                            <path d="M14.5 25.2C14.5 20.4 19.3 17.2 24 21.8C28.7 17.2 33.5 20.4 33.5 25.2C33.5 30.8 24 35.8 24 35.8C24 35.8 14.5 30.8 14.5 25.2Z" fill="#10B981"/>
+                            <circle cx="24" cy="14.2" r="2.5" fill="#FBBF24"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 id="authHeading" class="text-lg sm:text-xl font-bold">Welcome to Sathi — Sign In</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Share What You Can. Support Who Needs.</p>
+                    </div>
+                </div>
+                <button type="button" onclick="goHome()" class="text-xs text-slate-300 hover:text-white bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer shrink-0">
+                    ← Home
+                </button>
+            </div>
+
+            <!-- Mode Tabs -->
+            <div class="grid grid-cols-2 border-b border-slate-200 bg-slate-50 text-xs sm:text-sm font-bold">
+                <button id="tabBtnLogin" type="button" onclick="setAuthMode('login')" class="py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white cursor-pointer">
+                    Login to Sathi
+                </button>
+                <button id="tabBtnSignup" type="button" onclick="setAuthMode('signup')" class="py-3 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer">
+                    Create Account (Sign Up)
+                </button>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <!-- One-Click Instant Demo Login Buttons -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700">⚡ Instant Sathi Demo Login (Auto-Redirects to Role Page)</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button type="button" onclick="quickDemoLogin('needy')" class="py-2 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5">
+                            <span>🙋</span> Needy (Priya S.)
+                        </button>
+                        <button type="button" onclick="quickDemoLogin('helper')" class="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5">
+                            <span>🍱</span> Helper (Rohan K.)
+                        </button>
+                        <button type="button" onclick="quickDemoLogin('admin')" class="py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5">
+                            <span>📊</span> Admin Monitor
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Standard Form -->
+                <form onsubmit="event.preventDefault(); submitAuthForm();" class="space-y-4">
+                    <div id="signupExtraFields" class="hidden space-y-3.5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+                                <input id="authFullName" type="text" placeholder="e.g., Priya Sharma" class="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Area / Locality</label>
+                                <input id="authLocality" type="text" value="Kothrud, Pune" class="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp Phone Number</label>
+                            <input id="authPhone" type="text" placeholder="e.g., +91 98220-44102" class="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Select Your Role (Redirects to Respective Dashboard)</label>
+                        <select id="authRoleSelect" onchange="prefillEmailForRole()" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="needy">Needy → Redirects to Needy Visual Feed</option>
+                            <option value="helper">Helper / Donor → Redirects to Helper Photo Composer &amp; Feed</option>
+                            <option value="admin">Admin → Redirects to Admin Monitoring Dashboard</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                            <input id="authEmail" type="email" value="priya.needy@sathi.org" class="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                            <input id="authPassword" type="password" value="••••••••" class="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <button id="authSubmitBtn" type="submit" class="w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 text-sm font-bold rounded-xl shadow-md transition-colors cursor-pointer">
+                        Login &amp; Go to Needy Feed →
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 3: NEEDY DASHBOARD (Instagram-Style Visual Feed + Need Composer)  -->
+    <!-- ===================================================================== -->
+    <main id="viewNeedy" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-5 fade-in">
+
+        <!-- Smart Nearby Match Banner -->
+        <div id="needyMatchBanner" class="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-start gap-3">
+                <span class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-base shrink-0 mt-0.5">✨</span>
+                <div>
+                    <h2 id="needyMatchTitle" class="text-sm font-bold text-emerald-950">Sathi Smart Match in Kothrud, Pune!</h2>
+                    <p id="needyMatchText" class="text-xs text-emerald-800 mt-0.5 leading-relaxed"></p>
+                </div>
+            </div>
+            <button type="button" onclick="filterNeedyNearby()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-2xs transition-colors cursor-pointer shrink-0">
+                Show Nearby Offers
+            </button>
         </div>
 
-        <div class="wa-box" style="color:#064e3b; margin-top:0;">
-          <h3 style="margin:0 0 8px;">How Sathi Works with WhatsApp</h3>
-          <p style="font-size:13px; margin:0 0 10px; color:#065f46;">
-            When a Helper posts surplus food or a Needy user claims an item, Sathi alerts nearby members on WhatsApp
-            and generates a <strong>4-digit Pickup PIN</strong> so handovers stay safe and quick.
-          </p>
-          <button class="emerald" onclick="openWaModal()">Preview Live WhatsApp Alert</button>
+        <!-- Unlocked Handover Card for Needy (Shown when an offer is claimed or inspected) -->
+        <div id="needyHandoverCard" class="hidden bg-blue-50 border-2 border-blue-300 rounded-2xl p-5 shadow-md fade-in"></div>
+
+        <!-- Two-Column Instagram-Style Layout: Left Sticky Composer + Right Visual Photo Feed -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- Left Column: Needy Photo & Request Composer (4 cols) -->
+            <div class="lg:col-span-4 lg:sticky lg:top-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-amber-600 text-white px-5 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold">Needy: Share Your Need</h3>
+                        <span class="text-[11px] font-semibold bg-white/20 px-2.5 py-0.5 rounded-full">Photo Post</span>
+                    </div>
+                    <p class="text-xs text-amber-100 mt-1">Post a request with optional photo (e.g., prescription or book list).</p>
+                </div>
+
+                <div class="p-5 space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Community Pillar</label>
+                        <select id="needyCategory" onchange="updateDynamicInputs('needy')" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="FoodShare">🍱 FoodShare – Extra food share karne</option>
+                            <option value="EduBridge">📚 EduBridge – Books ani study material</option>
+                            <option value="NeedNotWaste">👕 NeedNotWaste – Clothes ani useful items</option>
+                            <option value="CareConnect">👵 CareConnect – Elderly basic assistance</option>
+                            <option value="HelpHub">🤝 HelpHub – General help requests</option>
+                        </select>
+                    </div>
+
+                    <!-- Photo Upload Picker + Live Preview -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Attach Photo (Optional)</label>
+                        <label class="flex items-center justify-center gap-2 w-full px-3 py-2.5 border-2 border-dashed border-slate-300 hover:border-amber-500 rounded-xl bg-slate-50 hover:bg-amber-50/40 text-xs font-semibold text-slate-600 cursor-pointer transition-colors">
+                            <span>📷</span>
+                            <span id="needyPhotoFileName">Choose photo from device...</span>
+                            <input id="needyPhotoInput" type="file" accept="image/*" onchange="handlePhotoSelect(event, 'needy')" class="hidden">
+                        </label>
+                        <div id="needyPhotoPreviewWrap" class="hidden mt-2 relative rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                            <img id="needyPhotoPreviewImg" src="" alt="Preview" class="w-full h-36 object-cover">
+                            <button type="button" onclick="clearSelectedPhoto('needy')" class="absolute top-2 right-2 bg-slate-900/80 hover:bg-slate-900 text-white text-[11px] font-bold px-2 py-1 rounded-lg cursor-pointer">
+                                ✕ Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Need Title</label>
+                        <input id="needyTitle" type="text" placeholder="e.g., Need warm dinner for 2 people" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label id="needyQtyLabel" class="block text-xs font-semibold text-slate-700 mb-1">Quantity / Amount</label>
+                            <input id="needyQty" type="text" placeholder="e.g., 2 plates" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label id="needyDynamicLabel" class="block text-xs font-semibold text-slate-700 mb-1">Veg / Non-Veg &amp; Time</label>
+                            <input id="needyDynamicInput" type="text" placeholder="Veg, before 10 PM" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                    </div>
+
+                    <div id="needySafetyNote" class="hidden text-[11px] bg-blue-50 text-blue-800 border border-blue-200 rounded-xl p-2.5 leading-relaxed"></div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Area / Locality</label>
+                            <input id="needyLocality" type="text" value="Kothrud, Pune" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp / Landmark</label>
+                            <input id="needyContact" type="text" value="+91 98220-44102 (Paud Rd)" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Caption / Details</label>
+                        <textarea id="needyDesc" rows="2" placeholder="Explain your requirement clearly..." class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"></textarea>
+                    </div>
+
+                    <button type="button" onclick="createPost('need')" class="w-full py-2.5 px-4 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-xl shadow-sm transition-colors cursor-pointer">
+                        Publish Need to Feed
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Instagram-Style Photo Feed (8 cols) -->
+            <div class="lg:col-span-8 space-y-4">
+                <!-- Filter Pills & Search Bar -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Sathi Visual Community Feed</h3>
+                            <p class="text-xs text-slate-500">Double-tap any photo to appreciate ❤️ • Click <strong>Claim Offer</strong> to unlock WhatsApp &amp; PIN</p>
+                        </div>
+                        <input id="needySearch" oninput="renderNeedyView()" type="text" placeholder="Search food, books, locality..." class="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 w-full sm:w-56">
+                    </div>
+
+                    <!-- 5 Pillar Filter Chips -->
+                    <div id="needyPillarChips" class="flex flex-wrap gap-1.5"></div>
+                </div>
+
+                <!-- Visual Feed Cards Stream -->
+                <div id="needyFeedStream" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+            </div>
         </div>
-      </div>
+    </main>
 
-      <h2 style="margin:0 0 12px;">Five Sathi Community Pillars</h2>
-      <div class="pillars">
-        <div class="pillar"><h3>🍱 FoodShare</h3><p>Extra food share karne — leftover event food & fresh meals.</p></div>
-        <div class="pillar"><h3>📚 EduBridge</h3><p>Books ani study material share karne — textbooks, notes & kits.</p></div>
-        <div class="pillar"><h3>👕 NeedNotWaste</h3><p>Clothes ani useful items donate karne — clean clothes & essentials.</p></div>
-        <div class="pillar"><h3>👵 CareConnect</h3><p>Elderly lokanna basic assistance — errands, medicine & support.</p></div>
-        <div class="pillar"><h3>🤝 HelpHub</h3><p>General help requests — medicines, bill support & urgent aid.</p></div>
-      </div>
-    </div>
+    <!-- ===================================================================== -->
+    <!-- VIEW 4: HELPER / DONOR DASHBOARD (Photo Composer + Visual Feed)       -->
+    <!-- ===================================================================== -->
+    <main id="viewHelper" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-5 fade-in">
 
-    <!-- AUTH VIEW -->
-    <div id="authView" class="hidden">
-      <div class="card" style="max-width:430px; margin:24px auto;">
-        <h2 style="margin-top:0;">Login / Register — Sathi</h2>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <input id="loginName" type="text" placeholder="Your Name (e.g., Priya, Rohan, or Admin)" />
-          <select id="loginRole">
-            <option value="Needy">Needy (Post needs & claim offers)</option>
-            <option value="Helper">Helper / Donor (Post surplus food/items & help)</option>
-            <option value="Admin">Admin (Monitor community impact)</option>
-          </select>
-          <input id="loginLocality" type="text" placeholder="Area / Locality (e.g., Kothrud, Pune)" value="Kothrud, Pune" />
-          <input id="loginPhone" type="text" placeholder="Phone / WhatsApp (e.g., 9876543210)" value="9876543210" />
-          <button class="emerald" onclick="enterDashboard()">Continue to My Dashboard</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- NEEDY & HELPER DASHBOARD -->
-    <div id="userDashView" class="hidden">
-      <div class="dash-grid">
-        <div class="card">
-          <h3 id="formHeading" style="margin-top:0;">Post to Sathi</h3>
-          <div style="display:flex; flex-direction:column; gap:9px;">
-            <select id="postPillar">
-              <option value="FoodShare">🍱 FoodShare</option>
-              <option value="EduBridge">📚 EduBridge</option>
-              <option value="NeedNotWaste">👕 NeedNotWaste</option>
-              <option value="CareConnect">👵 CareConnect</option>
-              <option value="HelpHub">🤝 HelpHub</option>
-            </select>
-            <input id="postTitle" type="text" placeholder="e.g., 2 plates of rice remaining from event" />
-            <input id="postQty" type="text" placeholder="Quantity (e.g., 2 plates, 1 set)" />
-            <input id="postSpec" type="text" placeholder="Spec (Veg/Non-Veg, Size, Valid Till)" />
-            <input id="postLocality" type="text" placeholder="Area / Locality" />
-            <input id="postContact" type="text" placeholder="WhatsApp / Pickup Landmark" />
-            <textarea id="postDesc" rows="3" placeholder="Short description..."></textarea>
-            <button id="btnPost" class="emerald" onclick="addPost()">Publish Post</button>
-          </div>
+        <!-- Nearby People Seeking Help Banner -->
+        <div id="helperMatchBanner" class="bg-amber-50 border border-amber-300 rounded-2xl p-4 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-start gap-3">
+                <span class="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center text-base shrink-0 mt-0.5">🔔</span>
+                <div>
+                    <h2 id="helperMatchTitle" class="text-sm font-bold text-amber-950">Neighbors Seeking Help Nearby in Kothrud, Pune</h2>
+                    <p id="helperMatchText" class="text-xs text-amber-900 mt-0.5 leading-relaxed"></p>
+                </div>
+            </div>
+            <button type="button" onclick="filterHelperNearby()" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-xl shadow-2xs transition-colors cursor-pointer shrink-0">
+                Show Nearby Needs
+            </button>
         </div>
 
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-            <h3 style="margin:0;">Community Posts</h3>
-            <select id="filterPillar" onchange="renderUserTable()">
-              <option value="All">All Pillars</option>
-              <option value="FoodShare">🍱 FoodShare</option>
-              <option value="EduBridge">📚 EduBridge</option>
-              <option value="NeedNotWaste">👕 NeedNotWaste</option>
-              <option value="CareConnect">👵 CareConnect</option>
-              <option value="HelpHub">🤝 HelpHub</option>
-            </select>
-          </div>
+        <!-- Unlocked Handover Card for Helper -->
+        <div id="helperHandoverCard" class="hidden bg-blue-50 border-2 border-blue-300 rounded-2xl p-5 shadow-md fade-in"></div>
 
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th><th>Type</th><th>Pillar</th><th>Title & Spec</th><th>Qty</th><th>Area</th><th>By</th><th>Status</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="userTbody"></tbody>
-          </table>
+        <!-- Two-Column Instagram-Style Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-          <div id="handoverCard" class="wa-box hidden"></div>
+            <!-- Left Column: Helper Photo & Surplus Offer Composer (4 cols) -->
+            <div class="lg:col-span-4 lg:sticky lg:top-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-emerald-600 text-white px-5 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold">Helper: Post Surplus Photo</h3>
+                        <span class="text-[11px] font-semibold bg-white/20 px-2.5 py-0.5 rounded-full">Insta Composer</span>
+                    </div>
+                    <p class="text-xs text-emerald-100 mt-1">Snap a photo of extra food, books, clothes, or care support.</p>
+                </div>
+
+                <div class="p-5 space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Community Pillar</label>
+                        <select id="helperCategory" onchange="updateDynamicInputs('helper')" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="FoodShare">🍱 FoodShare – Extra food share karne</option>
+                            <option value="EduBridge">📚 EduBridge – Books ani study material</option>
+                            <option value="NeedNotWaste">👕 NeedNotWaste – Clothes ani useful items</option>
+                            <option value="CareConnect">👵 CareConnect – Elderly basic assistance</option>
+                            <option value="HelpHub">🤝 HelpHub – General help requests</option>
+                        </select>
+                    </div>
+
+                    <!-- Photo Upload Picker + Live Preview -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Upload Item Photo (Live Preview)</label>
+                        <label class="flex items-center justify-center gap-2 w-full px-3 py-2.5 border-2 border-dashed border-emerald-300 hover:border-emerald-500 rounded-xl bg-emerald-50/40 hover:bg-emerald-50 text-xs font-semibold text-emerald-800 cursor-pointer transition-colors">
+                            <span>📸</span>
+                            <span id="helperPhotoFileName">Upload photo of food / books / clothes...</span>
+                            <input id="helperPhotoInput" type="file" accept="image/*" onchange="handlePhotoSelect(event, 'helper')" class="hidden">
+                        </label>
+                        <div id="helperPhotoPreviewWrap" class="hidden mt-2 relative rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+                            <img id="helperPhotoPreviewImg" src="" alt="Preview" class="w-full h-36 object-cover">
+                            <button type="button" onclick="clearSelectedPhoto('helper')" class="absolute top-2 right-2 bg-slate-900/80 hover:bg-slate-900 text-white text-[11px] font-bold px-2 py-1 rounded-lg cursor-pointer">
+                                ✕ Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Offer Title</label>
+                        <input id="helperTitle" type="text" placeholder="e.g., 2 plates of veg rice remaining from event" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label id="helperQtyLabel" class="block text-xs font-semibold text-slate-700 mb-1">Quantity / Amount</label>
+                            <input id="helperQty" type="text" placeholder="e.g., 2 plates" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div>
+                            <label id="helperDynamicLabel" class="block text-xs font-semibold text-slate-700 mb-1">Veg / Non-Veg &amp; Valid Until</label>
+                            <input id="helperDynamicInput" type="text" placeholder="Veg, pickup before 11 PM" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                    </div>
+
+                    <div id="helperSafetyNote" class="hidden text-[11px] bg-blue-50 text-blue-800 border border-blue-200 rounded-xl p-2.5 leading-relaxed"></div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Pickup Area / Locality</label>
+                            <input id="helperLocality" type="text" value="Kothrud, Pune" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp / Gate Landmark</label>
+                            <input id="helperContact" type="text" value="+91 98501-77310 (MIT Gate 2)" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Caption &amp; Handover Notes</label>
+                        <textarea id="helperDesc" rows="2" placeholder="Condition, freshness, or pickup instructions..." class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"></textarea>
+                    </div>
+
+                    <button type="button" onclick="createPost('offer')" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-sm transition-colors cursor-pointer">
+                        Share Photo Offer to Feed
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Visual Feed of Needs & My Offers (8 cols) -->
+            <div class="lg:col-span-8 space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Neighbors in Need &amp; My Shared Posts</h3>
+                            <p class="text-xs text-slate-500">Double-tap to appreciate ❤️ • Click <strong>Fulfill Need</strong> to help a neighbor</p>
+                        </div>
+                        <input id="helperSearch" oninput="renderHelperView()" type="text" placeholder="Search needs or locality..." class="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full sm:w-56">
+                    </div>
+
+                    <!-- 5 Pillar Filter Chips -->
+                    <div id="helperPillarChips" class="flex flex-wrap gap-1.5"></div>
+                </div>
+
+                <!-- Visual Feed Cards Stream -->
+                <div id="helperFeedStream" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+            </div>
         </div>
-      </div>
-    </div>
+    </main>
 
-    <!-- ADMIN DASHBOARD -->
-    <div id="adminDashView" class="hidden">
-      <div class="kpi-grid">
-        <div class="kpi" style="border-left-color:#059669;"><div>Total People Helped</div><div class="num" id="kHelped">0</div></div>
-        <div class="kpi" style="border-left-color:#d97706;"><div>Open Needs Waiting</div><div class="num" id="kNeeds">0</div></div>
-        <div class="kpi" style="border-left-color:#2563eb;"><div>Active Helper Offers</div><div class="num" id="kOffers">0</div></div>
-        <div class="kpi" style="border-left-color:#7c3aed;"><div>Total Posts</div><div class="num" id="kTotal">0</div></div>
-      </div>
+    <!-- ===================================================================== -->
+    <!-- VIEW 5: ADMIN MONITORING DASHBOARD                                    -->
+    <!-- ===================================================================== -->
+    <main id="viewAdmin" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-6 fade-in">
 
-      <div class="card">
-        <h3 style="margin:0 0 8px;">Admin Monitoring — All Sathi Posts</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th><th>Type</th><th>Pillar</th><th>Title</th><th>Qty</th><th>Area</th><th>Posted By</th><th>Claimed By</th><th>Status</th><th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="adminTbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+        <!-- 4 Live KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border-l-4 border-emerald-600 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total People Helped</span>
+                    <span class="text-lg">💚</span>
+                </div>
+                <div id="kpiPeopleHelped" class="text-3xl font-extrabold text-slate-900 mt-2">0</div>
+                <p id="kpiHelpedBreakdown" class="text-xs text-emerald-700 font-medium mt-1">Completed &amp; active handovers</p>
+            </div>
 
-  <!-- WHATSAPP MODAL -->
-  <div id="waModal" class="modal-backdrop hidden" onclick="closeWaModal()">
-    <div class="modal-card" onclick="event.stopPropagation()">
-      <h3 style="margin:0 0 8px; color:#065f46;">Sathi WhatsApp Coordination Alert</h3>
-      <p style="font-size:13.5px; background:#ecfdf5; padding:12px; border-radius:8px; border:1px solid #6ee7b7;">
-        <strong>🍱 FoodShare Alert (Kothrud, Pune):</strong><br>
-        Helper <strong>Rohan</strong> posted <strong>2 plates of veg rice</strong> from a family event (Pickup before 10:30 PM).<br><br>
-        Once claimed by a Needy user, Sathi shares the pickup landmark and 4-digit PIN <strong>#4829</strong>.
-      </p>
-      <button onclick="closeWaModal()" style="width:100%;">Close Preview</button>
-    </div>
-  </div>
+            <div class="bg-white p-5 rounded-2xl border-l-4 border-amber-500 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Open Needs Waiting</span>
+                    <span class="text-lg">🙋</span>
+                </div>
+                <div id="kpiOpenNeeds" class="text-3xl font-extrabold text-slate-900 mt-2">0</div>
+                <p class="text-xs text-amber-700 font-medium mt-1">Awaiting helper response</p>
+            </div>
 
-  <script>
-    let currentUser = null;
-    let posts = [
-      { id: 101, type: "Offer", pillar: "FoodShare", title: "2 plates of veg rice from family event", qty: "2 plates", spec: "Pure Veg • Valid till 10:30 PM", locality: "Kothrud, Pune", contact: "9123456789 - Gate No 2", by: "Rohan (Helper)", claimedBy: "-", pin: "4829", status: "Open" },
-      { id: 102, type: "Need", pillar: "EduBridge", title: "Need Class 10 Science & Maths books", qty: "1 set", spec: "Study Material", locality: "Kothrud, Pune", contact: "9876543210 - Near Depot", by: "Priya (Needy)", claimedBy: "-", pin: "7314", status: "Open" },
-      { id: 103, type: "Offer", pillar: "NeedNotWaste", title: "2 clean jackets & school bag", qty: "3 items", spec: "Size M • Washed", locality: "Kothrud, Pune", contact: "9123456789", by: "Rohan (Helper)", claimedBy: "Priya (Needy)", pin: "5190", status: "Completed" }
-    ];
-    let nextId = 104;
+            <div class="bg-white p-5 rounded-2xl border-l-4 border-blue-600 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Available Helper Offers</span>
+                    <span class="text-lg">🎁</span>
+                </div>
+                <div id="kpiOpenOffers" class="text-3xl font-extrabold text-slate-900 mt-2">0</div>
+                <p class="text-xs text-blue-700 font-medium mt-1">Active visual posts ready to claim</p>
+            </div>
 
-    function showView(id) {
-      ["homeView", "authView", "userDashView", "adminDashView"].forEach(v => document.getElementById(v).classList.add("hidden"));
-      document.getElementById(id).classList.remove("hidden");
-    }
+            <div class="bg-white p-5 rounded-2xl border-l-4 border-indigo-600 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Sathi Members</span>
+                    <span class="text-lg">👥</span>
+                </div>
+                <div id="kpiTotalMembers" class="text-3xl font-extrabold text-slate-900 mt-2">0</div>
+                <p id="kpiMembersSplit" class="text-xs text-indigo-700 font-medium mt-1">0 Needy • 0 Helpers</p>
+            </div>
+        </div>
 
-    function openWaModal() { document.getElementById("waModal").classList.remove("hidden"); }
-    function closeWaModal() { document.getElementById("waModal").classList.add("hidden"); }
+        <!-- Pillar Impact Breakdown + Live Audit Log -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800">Pillar Impact Breakdown</h3>
+                        <p class="text-xs text-slate-500">People helped across the 5 Sathi pillars</p>
+                    </div>
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Live Metrics</span>
+                </div>
+                <div id="categoryBarsContainer" class="space-y-3.5"></div>
+            </div>
 
-    function goAuthRole(role) {
-      document.getElementById("loginRole").value = role;
-      showView("authView");
-    }
+            <div class="lg:col-span-7 bg-slate-900 text-white p-5 rounded-2xl shadow-sm flex flex-col">
+                <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <h3 class="text-sm sm:text-base font-bold">Live Sathi Activity &amp; Audit Log</h3>
+                    </div>
+                    <span id="adminLogCounter" class="text-xs font-mono bg-slate-800 text-slate-300 px-2.5 py-1 rounded-lg">0 events</span>
+                </div>
+                <div id="adminAuditLogList" class="font-mono text-xs text-emerald-400 space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+            </div>
+        </div>
 
-    function quickDemoLogin(role) {
-      currentUser = {
-        name: role === "Helper" ? "Rohan K." : role === "Admin" ? "Sathi Admin" : "Priya S.",
-        role,
-        locality: "Kothrud, Pune",
-        phone: "9876543210"
-      };
-      activateSession();
-    }
+        <!-- Full Moderation Table with Photo Thumbnails -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800">All Sathi Posts — Visual Moderation &amp; Monitoring</h3>
+                    <p class="text-xs text-slate-500">Inspect uploaded photos, verify claims, and remove expired or invalid entries</p>
+                </div>
 
-    function enterDashboard() {
-      const name = document.getElementById("loginName").value.trim() || "Demo User";
-      currentUser = {
-        name,
-        role: document.getElementById("loginRole").value,
-        locality: document.getElementById("loginLocality").value.trim() || "Kothrud, Pune",
-        phone: document.getElementById("loginPhone").value.trim() || "9876543210"
-      };
-      activateSession();
-    }
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="adminFilterStatus" onchange="renderAdminView()" class="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="All">All Statuses</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <select id="adminFilterCat" onchange="renderAdminView()" class="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="All">All 5 Pillars</option>
+                        <option value="FoodShare">🍱 FoodShare</option>
+                        <option value="EduBridge">📚 EduBridge</option>
+                        <option value="NeedNotWaste">👕 NeedNotWaste</option>
+                        <option value="CareConnect">👵 CareConnect</option>
+                        <option value="HelpHub">🤝 HelpHub</option>
+                    </select>
+                </div>
+            </div>
 
-    function activateSession() {
-      document.getElementById("guestNav").classList.add("hidden");
-      document.getElementById("userNav").classList.remove("hidden");
-      document.getElementById("navRole").textContent = currentUser.role.toUpperCase();
-      document.getElementById("navName").textContent = currentUser.name;
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                            <th class="py-3 px-3">ID</th>
+                            <th class="py-3 px-3">Photo</th>
+                            <th class="py-3 px-3">Type</th>
+                            <th class="py-3 px-3">Title &amp; Spec</th>
+                            <th class="py-3 px-3">Pillar</th>
+                            <th class="py-3 px-3">Locality</th>
+                            <th class="py-3 px-3">Posted By</th>
+                            <th class="py-3 px-3">Claimed By</th>
+                            <th class="py-3 px-3">Status</th>
+                            <th class="py-3 px-3 text-right">Moderation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y divide-slate-100 text-xs sm:text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
-      if (currentUser.role === "Admin") {
-        renderAdmin();
-        showView("adminDashView");
-      } else {
-        const isHelper = currentUser.role === "Helper";
-        document.getElementById("formHeading").textContent = isHelper ? "Helper: Post Surplus / Offer" : "Needy: Post Your Need";
-        document.getElementById("btnPost").textContent = isHelper ? "Publish Offer" : "Submit Need";
-        document.getElementById("postLocality").value = currentUser.locality;
-        document.getElementById("postContact").value = currentUser.phone;
-        renderUserTable();
-        showView("userDashView");
-      }
-    }
+    <!-- Footer with Sathi Emblem -->
+    <footer class="bg-white border-t border-slate-200 py-5 px-4 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <svg viewBox="0 0 48 48" class="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.5 25.5C9.5 17.5 16 11 24 11C27.7 11 31.1 12.4 33.7 14.7" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M38.5 22.5C38.5 30.5 32 37 24 37C20.3 37 16.9 35.6 14.3 33.3" stroke="#6366F1" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M14.5 25.2C14.5 20.4 19.3 17.2 24 21.8C28.7 17.2 33.5 20.4 33.5 25.2C33.5 30.8 24 35.8 24 35.8C24 35.8 14.5 30.8 14.5 25.2Z" fill="#0D9488"/>
+                    <circle cx="24" cy="14.2" r="2.8" fill="#F59E0B"/>
+                </svg>
+                <span class="font-bold text-slate-800">Sathi</span>
+                <span>— Share What You Can. Support Who Needs.</span>
+            </div>
+            <div>🍱 FoodShare • 📚 EduBridge • 👕 NeedNotWaste • 👵 CareConnect • 🤝 HelpHub</div>
+        </div>
+    </footer>
 
-    function logout() {
-      currentUser = null;
-      document.getElementById("userNav").classList.add("hidden");
-      document.getElementById("guestNav").classList.remove("hidden");
-      showView("homeView");
-    }
+    <script>
+        // =====================================================================
+        // CRISP SVG VISUAL PHOTO ARTWORKS FOR PRE-LOADED SAMPLE POSTS
+        // =====================================================================
+        const SAMPLE_PHOTOS = {
+            ricePlates: `
+                <svg viewBox="0 0 600 360" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="tableBg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#FEF3C7"/>
+                            <stop offset="100%" stop-color="#FDE68A"/>
+                        </linearGradient>
+                        <radialGradient id="plateGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="75%" stop-color="#FFFFFF"/>
+                            <stop offset="100%" stop-color="#E2E8F0"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="600" height="360" fill="url(#tableBg)"/>
+                    <rect x="0" y="250" width="600" height="110" fill="#F59E0B" opacity="0.18"/>
+                    <!-- Left Plate of Veg Jeera Rice -->
+                    <circle cx="195" cy="185" r="108" fill="#CBD5E1" opacity="0.45"/>
+                    <circle cx="190" cy="180" r="105" fill="url(#plateGrad)" stroke="#CBD5E1" stroke-width="3"/>
+                    <circle cx="190" cy="180" r="82" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="6 4"/>
+                    <!-- Rice Mound -->
+                    <ellipse cx="190" cy="185" rx="64" ry="52" fill="#FFFBEB"/>
+                    <ellipse cx="188" cy="176" rx="54" ry="42" fill="#FEF9C3"/>
+                    <!-- Jeera, Peas & Coriander Garnish -->
+                    <circle cx="170" cy="168" r="4" fill="#16A34A"/>
+                    <circle cx="205" cy="172" r="4" fill="#16A34A"/>
+                    <circle cx="186" cy="190" r="4" fill="#16A34A"/>
+                    <circle cx="175" cy="185" r="3" fill="#EA580C"/>
+                    <circle cx="200" cy="186" r="3" fill="#EA580C"/>
+                    <path d="M182 162 Q190 154 198 162" stroke="#15803D" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- Right Plate of Veg Jeera Rice -->
+                    <circle cx="415" cy="185" r="108" fill="#CBD5E1" opacity="0.45"/>
+                    <circle cx="410" cy="180" r="105" fill="url(#plateGrad)" stroke="#CBD5E1" stroke-width="3"/>
+                    <circle cx="410" cy="180" r="82" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="6 4"/>
+                    <ellipse cx="410" cy="185" rx="64" ry="52" fill="#FFFBEB"/>
+                    <ellipse cx="408" cy="176" rx="54" ry="42" fill="#FEF9C3"/>
+                    <circle cx="395" cy="170" r="4" fill="#16A34A"/>
+                    <circle cx="424" cy="176" r="4" fill="#16A34A"/>
+                    <circle cx="406" cy="188" r="4" fill="#16A34A"/>
+                    <circle cx="418" cy="164" r="3" fill="#EA580C"/>
+                    <path d="M402 162 Q410 154 418 162" stroke="#15803D" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- Freshness Tag Badge -->
+                    <rect x="20" y="20" width="215" height="34" rx="17" fill="#065F46"/>
+                    <text x="127" y="42" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">🍱 2 Plates Fresh Veg Rice</text>
+                </svg>
+            `,
+            winterSweaters: `
+                <svg viewBox="0 0 600 360" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="clothBg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#E0F2FE"/>
+                            <stop offset="100%" stop-color="#BAE6FD"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="600" height="360" fill="url(#clothBg)"/>
+                    <!-- Folded Jacket & Sweaters Stack -->
+                    <rect x="130" y="210" width="340" height="58" rx="18" fill="#1E3A8A"/>
+                    <rect x="145" y="222" width="310" height="10" rx="5" fill="#3B82F6" opacity="0.5"/>
+                    <rect x="150" y="154" width="300" height="58" rx="18" fill="#0D9488"/>
+                    <rect x="165" y="166" width="270" height="10" rx="5" fill="#5EEAD4" opacity="0.5"/>
+                    <rect x="170" y="98" width="260" height="58" rx="18" fill="#D97706"/>
+                    <rect x="185" y="110" width="230" height="10" rx="5" fill="#FCD34D" opacity="0.6"/>
+                    <!-- Ribbon & Washed Tag -->
+                    <rect x="282" y="92" width="36" height="182" rx="6" fill="#FFFFFF" opacity="0.85"/>
+                    <rect x="20" y="20" width="225" height="34" rx="17" fill="#92400E"/>
+                    <text x="132" y="42" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">👕 Washed Winter Wear (L)</text>
+                </svg>
+            `,
+            textbooks: `
+                <svg viewBox="0 0 600 360" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="bookBg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#EEF2FF"/>
+                            <stop offset="100%" stop-color="#C7D2FE"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="600" height="360" fill="url(#bookBg)"/>
+                    <!-- Stacked Class 10 Textbooks -->
+                    <rect x="125" y="220" width="350" height="46" rx="8" fill="#1D4ED8"/>
+                    <rect x="138" y="227" width="324" height="32" rx="4" fill="#FFFFFF"/>
+                    <text x="300" y="248" fill="#1E3A8A" font-family="Inter, sans-serif" font-size="14" font-weight="800" text-anchor="middle">CLASS 10 MATHEMATICS • SSC</text>
 
-    function addPost() {
-      const title = document.getElementById("postTitle").value.trim();
-      const qty = document.getElementById("postQty").value.trim() || "1";
-      const locality = document.getElementById("postLocality").value.trim();
-      if (!title || !locality) return alert("Enter Title and Area/Locality.");
+                    <rect x="145" y="170" width="310" height="46" rx="8" fill="#047857"/>
+                    <rect x="158" y="177" width="284" height="32" rx="4" fill="#FFFFFF"/>
+                    <text x="300" y="198" fill="#065F46" font-family="Inter, sans-serif" font-size="14" font-weight="800" text-anchor="middle">SCIENCE &amp; TECHNOLOGY PART 1 &amp; 2</text>
 
-      posts.unshift({
-        id: nextId++,
-        type: currentUser.role === "Helper" ? "Offer" : "Need",
-        pillar: document.getElementById("postPillar").value,
-        title,
-        qty,
-        spec: document.getElementById("postSpec").value.trim() || "General",
-        locality,
-        contact: document.getElementById("postContact").value.trim() || currentUser.phone,
-        by: `${currentUser.name} (${currentUser.role})`,
-        claimedBy: "-",
-        pin: String(Math.floor(1000 + Math.random() * 9000)),
-        status: "Open"
-      });
-      document.getElementById("postTitle").value = "";
-      document.getElementById("postQty").value = "";
-      document.getElementById("postSpec").value = "";
-      document.getElementById("postDesc").value = "";
-      renderUserTable();
-    }
+                    <rect x="165" y="120" width="270" height="46" rx="8" fill="#B45309"/>
+                    <rect x="178" y="127" width="244" height="32" rx="4" fill="#FFFFFF"/>
+                    <text x="300" y="148" fill="#92400E" font-family="Inter, sans-serif" font-size="13" font-weight="800" text-anchor="middle">SOLVED BOARD QUESTION PAPERS</text>
 
-    function renderUserTable() {
-      const filter = document.getElementById("filterPillar").value;
-      const isHelper = currentUser.role === "Helper";
-      const list = posts.filter(p => filter === "All" || p.pillar === filter);
+                    <rect x="20" y="20" width="225" height="34" rx="17" fill="#1E3A8A"/>
+                    <text x="132" y="42" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">📚 EduBridge Class 10 Set</text>
+                </svg>
+            `,
+            elderCare: `
+                <svg viewBox="0 0 600 360" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="careBg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#F3E8FF"/>
+                            <stop offset="100%" stop-color="#DDD6FE"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="600" height="360" fill="url(#careBg)"/>
+                    <!-- Pharmacy Bag + Care Heart -->
+                    <rect x="205" y="105" width="190" height="175" rx="22" fill="#FFFFFF" stroke="#A855F7" stroke-width="4"/>
+                    <path d="M255 105 C255 72 345 72 345 105" stroke="#7E22CE" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    <rect x="286" y="155" width="28" height="76" rx="6" fill="#10B981"/>
+                    <rect x="262" y="179" width="76" height="28" rx="6" fill="#10B981"/>
+                    <rect x="20" y="20" width="235" height="34" rx="17" fill="#6B21A8"/>
+                    <text x="137" y="42" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">👵 CareConnect Pharmacy Aid</text>
+                </svg>
+            `,
+            helpHub: `
+                <svg viewBox="0 0 600 360" class="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="hubBg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#FFE4E6"/>
+                            <stop offset="100%" stop-color="#FECDD3"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="600" height="360" fill="url(#hubBg)"/>
+                    <rect x="155" y="95" width="290" height="175" rx="24" fill="#FFFFFF" stroke="#F43F5E" stroke-width="4"/>
+                    <circle cx="300" cy="162" r="34" fill="#10B981"/>
+                    <path d="M285 162 L296 173 L317 151" stroke="#FFFFFF" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <text x="300" y="222" fill="#0F172A" font-family="Inter, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Direct School Fee Sponsorship</text>
+                    <text x="300" y="244" fill="#64748B" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Verified Receipt / Direct UPI</text>
+                    <rect x="20" y="20" width="205" height="34" rx="17" fill="#BE123C"/>
+                    <text x="122" y="42" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">🤝 HelpHub Sponsorship</text>
+                </svg>
+            `
+        };
 
-      document.getElementById("userTbody").innerHTML = list.map(p => {
-        const canClaim = p.status === "Open" && ((isHelper && p.type === "Need") || (!isHelper && p.type === "Offer"));
-        const canComplete = p.status === "In Progress";
-        const canPin = p.status !== "Open";
+        // =====================================================================
+        // APPLICATION STATE & FIVE PILLAR CONFIGURATION
+        // =====================================================================
+        let currentUser = null;
+        let authMode = 'login';
+        let nextId = 106;
+        let auditLogs = [];
+        let needyPillarFilter = 'All';
+        let helperPillarFilter = 'All';
 
-        return `<tr>
-          <td>#${p.id}</td>
-          <td><span class="badge ${p.type === "Offer" ? "b-offer" : "b-need"}">${p.type}</span></td>
-          <td>${p.pillar}</td>
-          <td><strong>${p.title}</strong><br><small style="color:#64748b">${p.spec}</small></td>
-          <td>${p.qty}</td>
-          <td>${p.locality}</td>
-          <td>${p.by}</td>
-          <td><span class="badge ${p.status === "Open" ? "b-open" : p.status === "In Progress" ? "b-prog" : "b-done"}">${p.status}</span></td>
-          <td style="display:flex; gap:5px; flex-wrap:wrap;">
-            ${canClaim ? `<button class="emerald" onclick="claim(${p.id})">${isHelper ? "Fulfill" : "Claim"}</button>` : ""}
-            ${canPin ? `<button class="secondary" onclick="showHandover(${p.id})">PIN</button>` : ""}
-            ${canComplete ? `<button onclick="complete(${p.id})">Done</button>` : ""}
-          </td>
-        </tr>`;
-      }).join("");
-    }
+        // Temporary uploaded image dataURLs for Needy & Helper composers
+        const pendingPhotos = {
+            needy: null,
+            helper: null
+        };
 
-    function claim(id) {
-      const p = posts.find(x => x.id === id);
-      if (!p) return;
-      p.status = "In Progress";
-      p.claimedBy = `${currentUser.name} (${currentUser.role})`;
-      renderUserTable();
-      showHandover(id);
-    }
+        const MEMBER_STATS = {
+            needyCount: 52,
+            helperCount: 39
+        };
 
-    function complete(id) {
-      const p = posts.find(x => x.id === id);
-      if (!p) return;
-      p.status = "Completed";
-      renderUserTable();
-    }
+        const PILLARS = [
+            { id: 'FoodShare', icon: '🍱', label: 'FoodShare', marathi: 'Extra food share karne' },
+            { id: 'EduBridge', icon: '📚', label: 'EduBridge', marathi: 'Books ani study material share karne' },
+            { id: 'NeedNotWaste', icon: '👕', label: 'NeedNotWaste', marathi: 'Clothes ani useful items donate karne' },
+            { id: 'CareConnect', icon: '👵', label: 'CareConnect', marathi: 'Elderly lokanna basic assistance' },
+            { id: 'HelpHub', icon: '🤝', label: 'HelpHub', marathi: 'General help requests' }
+        ];
 
-    function showHandover(id) {
-      const p = posts.find(x => x.id === id);
-      if (!p) return;
-      const box = document.getElementById("handoverCard");
-      box.classList.remove("hidden");
-      box.innerHTML = `
-        <strong>Handover Details Unlocked — #${p.id} (${p.title})</strong><br>
-        • <strong>Area / Landmark:</strong> ${p.locality}<br>
-        • <strong>Contact:</strong> ${p.contact}<br>
-        • <strong>4-Digit Pickup PIN:</strong> <span class="badge b-open" style="font-size:13px;">${p.pin}</span>
-      `;
-    }
+        const CATEGORY_CONFIG = {
+            'FoodShare': {
+                qtyLabel: 'Quantity (Plates / Packs)',
+                qtyPlaceholder: 'e.g., 2 plates',
+                dynLabel: 'Veg / Non-Veg & Valid Until',
+                dynPlaceholder: 'Veg, pickup before 11:00 PM',
+                safetyNote: ''
+            },
+            'EduBridge': {
+                qtyLabel: 'Quantity / Sets',
+                qtyPlaceholder: 'e.g., 1 complete set',
+                dynLabel: 'Class / Subject / Board',
+                dynPlaceholder: 'Class 10 SSC Science & Maths',
+                safetyNote: ''
+            },
+            'NeedNotWaste': {
+                qtyLabel: 'Quantity / Items',
+                qtyPlaceholder: 'e.g., 3 garments',
+                dynLabel: 'Size / Age Group & Condition',
+                dynPlaceholder: 'Size L • Washed & Gently Used',
+                safetyNote: ''
+            },
+            'CareConnect': {
+                qtyLabel: 'Visit / Errand Duration',
+                qtyPlaceholder: 'e.g., 1 hour / 1 trip',
+                dynLabel: 'Assistance Type & Timing',
+                dynPlaceholder: 'Pharmacy pickup / Clinic accompaniment',
+                safetyNote: '👵 CareConnect Note: Coordinate pickup landmark and family contact clearly for senior citizen safety.'
+            },
+            'HelpHub': {
+                qtyLabel: 'Quantity / Amount (₹)',
+                qtyPlaceholder: 'e.g., ₹1,000 or 2 strips',
+                dynLabel: 'Purpose / Expiry / Direct UPI',
+                dynPlaceholder: 'Direct school bill / Sealed Exp 09/2027',
+                safetyNote: '💡 Safety & Transparency: For medicines verify expiry date; for financial help prefer direct bill/UPI payment.'
+            }
+        };
 
-    function renderAdmin() {
-      const helped = posts.filter(p => p.status === "In Progress" || p.status === "Completed").length;
-      const openNeeds = posts.filter(p => p.type === "Need" && p.status === "Open").length;
-      const openOffers = posts.filter(p => p.type === "Offer" && p.status === "Open").length;
+        // Pre-populated Instagram-Style Visual Feed Posts
+        let posts = [
+            {
+                id: 101,
+                type: 'offer',
+                title: '2 plates of veg rice remaining from family function',
+                quantity: '2 plates',
+                category: 'FoodShare',
+                extraSpec: 'Pure Veg • Valid until 11:00 PM tonight',
+                locality: 'Kothrud, Pune',
+                postedByRole: 'helper',
+                postedByName: 'Rohan K.',
+                postedByInitials: 'RK',
+                timeAgo: '4 mins ago',
+                whatsappPhone: '919850177310',
+                contactInfo: '+91 98501-77310 • Pickup at MIT Gate 2, Kothrud',
+                description: 'Freshly packed steamed veg jeera rice & dal left over after evening family function. Clean containers ready for pickup.',
+                photoType: 'svg',
+                photoContent: SAMPLE_PHOTOS.ricePlates,
+                likes: 18,
+                likedByMe: false,
+                claimedByRole: null,
+                claimedByName: null,
+                status: 'Open',
+                pin: '4829'
+            },
+            {
+                id: 102,
+                type: 'offer',
+                title: 'Men winter jacket Size L & kids woolen sweaters',
+                quantity: '3 garments',
+                category: 'NeedNotWaste',
+                extraSpec: 'Size L & Kids 8–10 yrs • Washed & Clean',
+                locality: 'Kothrud, Pune',
+                postedByRole: 'helper',
+                postedByName: 'Sneha M.',
+                postedByInitials: 'SM',
+                timeAgo: '26 mins ago',
+                whatsappPhone: '919764211908',
+                contactInfo: '+91 97642-11908 • Rambaug Colony, Kothrud',
+                description: 'Warm fleece jacket and two washed woolen sweaters neatly packed for anyone needing winter wear.',
+                photoType: 'svg',
+                photoContent: SAMPLE_PHOTOS.winterSweaters,
+                likes: 24,
+                likedByMe: false,
+                claimedByRole: null,
+                claimedByName: null,
+                status: 'Open',
+                pin: '7314'
+            },
+            {
+                id: 103,
+                type: 'need',
+                title: 'Need Class 10 Science & Maths textbooks + solved papers',
+                quantity: '1 complete set',
+                category: 'EduBridge',
+                extraSpec: 'SSC Board • English Medium',
+                locality: 'Kothrud, Pune',
+                postedByRole: 'needy',
+                postedByName: 'Priya S.',
+                postedByInitials: 'PS',
+                timeAgo: '41 mins ago',
+                whatsappPhone: '919822044102',
+                contactInfo: '+91 98220-44102 • Near Kothrud Bus Depot',
+                description: 'Preparing for upcoming board exams; looking for gently used Class 10 Science & Maths textbooks.',
+                photoType: 'svg',
+                photoContent: SAMPLE_PHOTOS.textbooks,
+                likes: 15,
+                likedByMe: false,
+                claimedByRole: null,
+                claimedByName: null,
+                status: 'Open',
+                pin: '6183'
+            },
+            {
+                id: 104,
+                type: 'need',
+                title: 'Elderly parents need evening medicine pickup from Paud Rd',
+                quantity: '1 pharmacy trip',
+                category: 'CareConnect',
+                extraSpec: 'Urgent before 9:30 PM • Prescription ready',
+                locality: 'Kothrud, Pune',
+                postedByRole: 'needy',
+                postedByName: 'Aarav T.',
+                postedByInitials: 'AT',
+                timeAgo: '1 hr ago',
+                whatsappPhone: '919921433819',
+                contactInfo: '+91 99214-33819 • Anand Nagar Metro Station, Kothrud',
+                description: 'Senior citizens unable to walk in traffic; need a kind volunteer to pick up regular BP medicines 600m away.',
+                photoType: 'svg',
+                photoContent: SAMPLE_PHOTOS.elderCare,
+                likes: 31,
+                likedByMe: false,
+                claimedByRole: null,
+                claimedByName: null,
+                status: 'Open',
+                pin: '9052'
+            },
+            {
+                id: 105,
+                type: 'offer',
+                title: 'Can sponsor ₹1,000 school fee directly via receipt/UPI',
+                quantity: '₹1,000',
+                category: 'HelpHub',
+                extraSpec: 'Direct School / Tuition Receipt Payment',
+                locality: 'Karve Nagar, Pune',
+                postedByRole: 'helper',
+                postedByName: 'Dr. Amit V.',
+                postedByInitials: 'AV',
+                timeAgo: '2 hrs ago',
+                whatsappPhone: '919823160544',
+                contactInfo: '+91 98231-60544 • Direct School Fee QR',
+                description: 'Happy to sponsor ₹1,000 directly toward a deserving student’s school fee or exam form.',
+                photoType: 'svg',
+                photoContent: SAMPLE_PHOTOS.helpHub,
+                likes: 42,
+                likedByMe: true,
+                claimedByRole: 'needy',
+                claimedByName: 'Meera D.',
+                status: 'Completed',
+                pin: '2947'
+            }
+        ];
 
-      document.getElementById("kHelped").textContent = helped;
-      document.getElementById("kNeeds").textContent = openNeeds;
-      document.getElementById("kOffers").textContent = openOffers;
-      document.getElementById("kTotal").textContent = posts.length;
+        // =====================================================================
+        // INITIALIZATION
+        // =====================================================================
+        window.onload = function () {
+            document.getElementById('heroSamplePhoto').innerHTML = SAMPLE_PHOTOS.ricePlates;
+            document.getElementById('waModalPhotoPreview').innerHTML = SAMPLE_PHOTOS.ricePlates;
+            addLog('Sathi Visual Feed initialized across FoodShare, EduBridge, NeedNotWaste, CareConnect & HelpHub.');
+            updateDynamicInputs('needy');
+            updateDynamicInputs('helper');
+            renderPillarFilterChips('needy');
+            renderPillarFilterChips('helper');
+            goHome();
+        };
 
-      document.getElementById("adminTbody").innerHTML = posts.map(p => `<tr>
-        <td>#${p.id}</td>
-        <td><span class="badge ${p.type === "Offer" ? "b-offer" : "b-need"}">${p.type}</span></td>
-        <td>${p.pillar}</td>
-        <td>${p.title}</td>
-        <td>${p.qty}</td>
-        <td>${p.locality}</td>
-        <td>${p.by}</td>
-        <td>${p.claimedBy}</td>
-        <td>${p.status}</td>
-        <td><button class="danger" onclick="removePost(${p.id})">Delete</button></td>
-      </tr>`).join("");
-    }
+        // =====================================================================
+        // VIEW MANAGEMENT & AUTOMATIC ROLE-BASED REDIRECTION
+        // =====================================================================
+        function hideAllViews() {
+            ['viewHome', 'viewAuth', 'viewNeedy', 'viewHelper', 'viewAdmin'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+        }
 
-    function removePost(id) {
-      posts = posts.filter(x => x.id !== id);
-      renderAdmin();
-    }
-  </script>
+        function goHome() {
+            hideAllViews();
+            document.getElementById('viewHome').classList.remove('hidden');
+            updateNavbarState();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openAuth(mode = 'login', preselectedRole = null) {
+            hideAllViews();
+            document.getElementById('viewAuth').classList.remove('hidden');
+            setAuthMode(mode);
+            if (preselectedRole) {
+                document.getElementById('authRoleSelect').value = preselectedRole;
+                prefillEmailForRole();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setAuthMode(mode) {
+            authMode = mode;
+            const tabLogin = document.getElementById('tabBtnLogin');
+            const tabSignup = document.getElementById('tabBtnSignup');
+            const extraFields = document.getElementById('signupExtraFields');
+            const heading = document.getElementById('authHeading');
+
+            if (mode === 'login') {
+                tabLogin.className = "py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white cursor-pointer";
+                tabSignup.className = "py-3 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer";
+                extraFields.classList.add('hidden');
+                heading.textContent = "Welcome to Sathi — Sign In";
+            } else {
+                tabSignup.className = "py-3 text-center border-b-2 border-emerald-600 text-emerald-700 bg-white cursor-pointer";
+                tabLogin.className = "py-3 text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800 cursor-pointer";
+                extraFields.classList.remove('hidden');
+                heading.textContent = "Create Sathi Account — Sign Up";
+            }
+            prefillEmailForRole();
+        }
+
+        function prefillEmailForRole() {
+            const role = document.getElementById('authRoleSelect').value;
+            const emailInput = document.getElementById('authEmail');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const actionWord = authMode === 'login' ? 'Login' : 'Sign Up';
+
+            if (role === 'needy') {
+                emailInput.value = 'priya.needy@sathi.org';
+                submitBtn.textContent = `${actionWord} & Go to Needy Feed →`;
+                submitBtn.className = "w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 text-sm font-bold rounded-xl shadow-md transition-colors cursor-pointer";
+            } else if (role === 'helper') {
+                emailInput.value = 'rohan.helper@sathi.org';
+                submitBtn.textContent = `${actionWord} & Go to Helper Feed →`;
+                submitBtn.className = "w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md transition-colors cursor-pointer";
+            } else {
+                emailInput.value = 'admin@sathi.org';
+                submitBtn.textContent = `${actionWord} & Go to Admin Monitor →`;
+                submitBtn.className = "w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-md transition-colors cursor-pointer";
+            }
+        }
+
+        function quickDemoLogin(role) {
+            if (role === 'needy') {
+                currentUser = {
+                    role: 'needy',
+                    name: 'Priya S.',
+                    initials: 'PS',
+                    locality: 'Kothrud, Pune',
+                    phone: '+91 98220-44102'
+                };
+            } else if (role === 'helper') {
+                currentUser = {
+                    role: 'helper',
+                    name: 'Rohan K.',
+                    initials: 'RK',
+                    locality: 'Kothrud, Pune',
+                    phone: '+91 98501-77310'
+                };
+            } else {
+                currentUser = {
+                    role: 'admin',
+                    name: 'Admin Monitor',
+                    initials: 'AM',
+                    locality: 'Pune HQ',
+                    phone: '+91 90000-00001'
+                };
+            }
+
+            addLog(`Sathi demo login: ${currentUser.name} [${role.toUpperCase()}] -> Redirected to ${role} dashboard.`);
+            showToast(`Logged into Sathi as ${currentUser.name} (${role.toUpperCase()}).`);
+            redirectToRoleDashboard(role);
+        }
+
+        function submitAuthForm() {
+            const role = document.getElementById('authRoleSelect').value;
+            const fullNameInput = document.getElementById('authFullName').value.trim();
+            const localityInput = document.getElementById('authLocality').value.trim() || 'Kothrud, Pune';
+            const phoneInput = document.getElementById('authPhone').value.trim();
+
+            let displayName = fullNameInput;
+            if (!displayName) {
+                displayName = role === 'needy' ? 'Priya S.' : role === 'helper' ? 'Rohan K.' : 'Admin Monitor';
+            }
+
+            const initials = displayName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'ST';
+            const defaultPhone = role === 'needy' ? '+91 98220-44102' : role === 'helper' ? '+91 98501-77310' : '+91 90000-00001';
+
+            currentUser = {
+                role,
+                name: displayName,
+                initials,
+                locality: localityInput,
+                phone: phoneInput || defaultPhone
+            };
+
+            if (authMode === 'signup') {
+                if (role === 'needy') MEMBER_STATS.needyCount++;
+                if (role === 'helper') MEMBER_STATS.helperCount++;
+            }
+
+            addLog(`${authMode === 'signup' ? 'Registered' : 'Logged in'}: ${currentUser.name} [${role.toUpperCase()}] -> Redirected.`);
+            showToast(`Welcome to Sathi, ${currentUser.name}!`);
+            redirectToRoleDashboard(role);
+        }
+
+        function redirectToRoleDashboard(role) {
+            hideAllViews();
+            updateNavbarState();
+
+            if (role === 'needy') {
+                document.getElementById('viewNeedy').classList.remove('hidden');
+                document.getElementById('needyLocality').value = currentUser.locality;
+                document.getElementById('needyContact').value = `${currentUser.phone} (${currentUser.locality})`;
+                document.getElementById('needyHandoverCard').classList.add('hidden');
+                renderNeedyView();
+            } else if (role === 'helper') {
+                document.getElementById('viewHelper').classList.remove('hidden');
+                document.getElementById('helperLocality').value = currentUser.locality;
+                document.getElementById('helperContact').value = `${currentUser.phone} (${currentUser.locality})`;
+                document.getElementById('helperHandoverCard').classList.add('hidden');
+                renderHelperView();
+            } else if (role === 'admin') {
+                document.getElementById('viewAdmin').classList.remove('hidden');
+                renderAdminView();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() {
+            if (currentUser) {
+                addLog(`User logged out: ${currentUser.name} [${currentUser.role.toUpperCase()}]`);
+            }
+            currentUser = null;
+            showToast('Logged out safely. Returned to Sathi Home Page.');
+            goHome();
+        }
+
+        function updateNavbarState() {
+            const navOut = document.getElementById('navLoggedOut');
+            const navIn = document.getElementById('navLoggedIn');
+            const badge = document.getElementById('navRoleBadge');
+
+            if (!currentUser) {
+                navOut.classList.remove('hidden');
+                navIn.classList.add('hidden');
+                return;
+            }
+
+            navOut.classList.add('hidden');
+            navIn.classList.remove('hidden');
+
+            if (currentUser.role === 'needy') {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30";
+                badge.textContent = `NEEDY: ${currentUser.name}`;
+            } else if (currentUser.role === 'helper') {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+                badge.textContent = `HELPER: ${currentUser.name}`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30";
+                badge.textContent = `ADMIN: ${currentUser.name}`;
+            }
+        }
+
+        // =====================================================================
+        // PHOTO UPLOAD & LIVE PREVIEW HANDLERS
+        // =====================================================================
+        function handlePhotoSelect(event, prefix) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                pendingPhotos[prefix] = e.target.result;
+                document.getElementById(prefix + 'PhotoFileName').textContent = file.name;
+                document.getElementById(prefix + 'PhotoPreviewImg').src = e.target.result;
+                document.getElementById(prefix + 'PhotoPreviewWrap').classList.remove('hidden');
+                showToast('Photo loaded! Preview ready before posting.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearSelectedPhoto(prefix) {
+            pendingPhotos[prefix] = null;
+            document.getElementById(prefix + 'PhotoInput').value = '';
+            document.getElementById(prefix + 'PhotoFileName').textContent = prefix === 'helper'
+                ? 'Upload photo of food / books / clothes...'
+                : 'Choose photo from device...';
+            document.getElementById(prefix + 'PhotoPreviewWrap').classList.add('hidden');
+        }
+
+        function getDefaultIllustrationForPillar(pillar) {
+            if (pillar === 'FoodShare') return SAMPLE_PHOTOS.ricePlates;
+            if (pillar === 'EduBridge') return SAMPLE_PHOTOS.textbooks;
+            if (pillar === 'NeedNotWaste') return SAMPLE_PHOTOS.winterSweaters;
+            if (pillar === 'CareConnect') return SAMPLE_PHOTOS.elderCare;
+            return SAMPLE_PHOTOS.helpHub;
+        }
+
+        // =====================================================================
+        // WHATSAPP MODAL & DYNAMIC FORM FIELDS
+        // =====================================================================
+        function openWhatsappModal() {
+            document.getElementById('whatsappModal').classList.remove('hidden');
+        }
+
+        function closeWhatsappModal() {
+            document.getElementById('whatsappModal').classList.add('hidden');
+        }
+
+        function updateDynamicInputs(prefix) {
+            const cat = document.getElementById(prefix + 'Category').value;
+            const cfg = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG['FoodShare'];
+
+            document.getElementById(prefix + 'QtyLabel').textContent = cfg.qtyLabel;
+            document.getElementById(prefix + 'Qty').placeholder = cfg.qtyPlaceholder;
+            document.getElementById(prefix + 'DynamicLabel').textContent = cfg.dynLabel;
+            document.getElementById(prefix + 'DynamicInput').placeholder = cfg.dynPlaceholder;
+
+            const noteBox = document.getElementById(prefix + 'SafetyNote');
+            if (cfg.safetyNote) {
+                noteBox.textContent = cfg.safetyNote;
+                noteBox.classList.remove('hidden');
+            } else {
+                noteBox.classList.add('hidden');
+            }
+        }
+
+        // =====================================================================
+        // PILLAR FILTER CHIPS
+        // =====================================================================
+        function renderPillarFilterChips(rolePrefix) {
+            const container = document.getElementById(rolePrefix + 'PillarChips');
+            const activeVal = rolePrefix === 'needy' ? needyPillarFilter : helperPillarFilter;
+
+            const allBtnClass = activeVal === 'All'
+                ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
+                : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200';
+
+            let html = `<button type="button" onclick="setPillarFilter('${rolePrefix}', 'All')" class="px-3 py-1.5 text-xs font-semibold rounded-full border transition-all cursor-pointer ${allBtnClass}">All Pillars</button>`;
+
+            PILLARS.forEach(p => {
+                const isSelected = activeVal === p.id;
+                const activeStyle = rolePrefix === 'needy'
+                    ? 'bg-amber-600 text-white border-amber-600 shadow-2xs'
+                    : 'bg-emerald-600 text-white border-emerald-600 shadow-2xs';
+                const btnClass = isSelected ? activeStyle : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100';
+
+                html += `<button type="button" onclick="setPillarFilter('${rolePrefix}', '${p.id}')" class="px-3 py-1.5 text-xs font-semibold rounded-full border transition-all cursor-pointer ${btnClass}">
+                    ${p.icon} ${p.label}
+                </button>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function setPillarFilter(rolePrefix, pillarId) {
+            if (rolePrefix === 'needy') {
+                needyPillarFilter = pillarId;
+                renderPillarFilterChips('needy');
+                renderNeedyView();
+            } else {
+                helperPillarFilter = pillarId;
+                renderPillarFilterChips('helper');
+                renderHelperView();
+            }
+        }
+
+        // =====================================================================
+        // CREATE POST (WITH PHOTO SUPPORT)
+        // =====================================================================
+        function createPost(postType) {
+            if (!currentUser) return;
+
+            const prefix = postType === 'need' ? 'needy' : 'helper';
+            const category = document.getElementById(prefix + 'Category').value;
+            const title = document.getElementById(prefix + 'Title').value.trim();
+            const quantity = document.getElementById(prefix + 'Qty').value.trim() || '1';
+            const extraSpec = document.getElementById(prefix + 'DynamicInput').value.trim() || 'Standard';
+            const locality = document.getElementById(prefix + 'Locality').value.trim();
+            const contactInfo = document.getElementById(prefix + 'Contact').value.trim();
+            const description = document.getElementById(prefix + 'Desc').value.trim();
+
+            if (!title || !locality) {
+                showToast('Please enter a Title and Area / Locality.', true);
+                return;
+            }
+
+            const digitsOnly = (currentUser.phone || '919822044102').replace(/\D/g, '');
+            const randomPin = String(Math.floor(1000 + Math.random() * 9000));
+            const uploadedImg = pendingPhotos[prefix];
+
+            const newPost = {
+                id: nextId++,
+                type: postType,
+                title,
+                quantity,
+                category,
+                extraSpec,
+                locality,
+                postedByRole: currentUser.role,
+                postedByName: currentUser.name,
+                postedByInitials: currentUser.initials || 'ST',
+                timeAgo: 'Just now',
+                whatsappPhone: digitsOnly.length >= 10 ? digitsOnly : '919822044102',
+                contactInfo: contactInfo || `${currentUser.phone} • ${locality}`,
+                description: description || `${title} (${quantity})`,
+                photoType: uploadedImg ? 'dataurl' : 'svg',
+                photoContent: uploadedImg || getDefaultIllustrationForPillar(category),
+                likes: 1,
+                likedByMe: true,
+                claimedByRole: null,
+                claimedByName: null,
+                status: 'Open',
+                pin: randomPin
+            };
+
+            posts.unshift(newPost);
+
+            // Reset form & photo preview
+            document.getElementById(prefix + 'Title').value = '';
+            document.getElementById(prefix + 'Qty').value = '';
+            document.getElementById(prefix + 'DynamicInput').value = '';
+            document.getElementById(prefix + 'Desc').value = '';
+            clearSelectedPhoto(prefix);
+
+            addLog(`[${currentUser.name} - ${currentUser.role.toUpperCase()}] shared visual post #${newPost.id}: "${title}" [${category}] in ${locality}`);
+            showToast(`Published to Sathi Visual Feed! WhatsApp locality alert sent.`);
+
+            if (postType === 'need') renderNeedyView();
+            else renderHelperView();
+        }
+
+        // =====================================================================
+        // INSTAGRAM-STYLE LIKE / DOUBLE-TAP HEART APPRECIATION
+        // =====================================================================
+        function toggleLike(postId, isDoubleTap = false) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            if (isDoubleTap) {
+                if (!post.likedByMe) {
+                    post.likedByMe = true;
+                    post.likes++;
+                }
+                const overlay = document.getElementById(`heartOverlay-${postId}`);
+                if (overlay) {
+                    overlay.classList.remove('hidden');
+                    overlay.classList.remove('animate-heart-burst');
+                    void overlay.offsetWidth;
+                    overlay.classList.add('animate-heart-burst');
+                    setTimeout(() => overlay.classList.add('hidden'), 780);
+                }
+            } else {
+                post.likedByMe = !post.likedByMe;
+                post.likes += post.likedByMe ? 1 : -1;
+            }
+
+            if (currentUser?.role === 'needy') renderNeedyView();
+            else if (currentUser?.role === 'helper') renderHelperView();
+        }
+
+        // =====================================================================
+        // CLAIM / FULFILL & HANDOVER UNLOCK
+        // =====================================================================
+        function claimItem(postId) {
+            if (!currentUser) return;
+            const post = posts.find(p => p.id === postId);
+            if (!post || post.status !== 'Open') return;
+
+            post.claimedByRole = currentUser.role;
+            post.claimedByName = currentUser.name;
+            post.status = 'In Progress';
+
+            addLog(`[${currentUser.name} - ${currentUser.role.toUpperCase()}] claimed #${post.id} ("${post.title}") -> Unlocked WhatsApp & PIN ${post.pin}`);
+            showToast(`Claimed #${post.id}! WhatsApp chat & 4-digit Pickup PIN unlocked at top.`);
+
+            if (currentUser.role === 'needy') {
+                renderNeedyView();
+                showHandoverCard(post, 'needyHandoverCard', 'needy');
+            } else {
+                renderHelperView();
+                showHandoverCard(post, 'helperHandoverCard', 'helper');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function markCompleted(postId) {
+            if (!currentUser) return;
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            post.status = 'Completed';
+            addLog(`[${currentUser.name}] marked #${post.id} ("${post.title}") as COMPLETED — People Helped count updated!`);
+            showToast(`Handover #${post.id} marked Completed! Admin impact stats updated.`);
+
+            if (currentUser.role === 'needy') {
+                renderNeedyView();
+                showHandoverCard(post, 'needyHandoverCard', 'needy');
+            } else {
+                renderHelperView();
+                showHandoverCard(post, 'helperHandoverCard', 'helper');
+            }
+        }
+
+        function showHandoverCard(post, containerId, viewerRole) {
+            const card = document.getElementById(containerId);
+            card.classList.remove('hidden');
+
+            const isCompleted = post.status === 'Completed';
+            const actionBtnLabel = viewerRole === 'needy' ? 'Mark Received' : 'Mark Delivered';
+            const waText = encodeURIComponent(`Hi ${post.postedByName}, I claimed #${post.id} (${post.title}) on Sathi. My 4-digit Pickup PIN is ${post.pin}.`);
+            const waUrl = `https://wa.me/${post.whatsappPhone || '919850177310'}?text=${waText}`;
+
+            card.innerHTML = `
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase rounded-full bg-blue-600 text-white">
+                                Sathi Handover Unlocked • #${post.id}
+                            </span>
+                            <span class="text-xs font-semibold text-blue-900">${escapeHtml(post.category)} (${escapeHtml(post.quantity)})</span>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900">${escapeHtml(post.title)}</h4>
+                        <div class="text-xs text-slate-700 space-y-1">
+                            <p><strong>📍 Area / Landmark:</strong> ${escapeHtml(post.locality)}</p>
+                            <p><strong>📞 Phone / Pickup Landmark:</strong> <span class="font-semibold text-blue-900">${escapeHtml(post.contactInfo)}</span></p>
+                            <p><strong>👤 Matched Neighbors:</strong> Posted by ${escapeHtml(post.postedByName)} • Claimed by ${escapeHtml(post.claimedByName || 'Pending')}</p>
+                        </div>
+                        <div class="pt-1">
+                            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 text-xs font-bold rounded-xl shadow-2xs transition-colors">
+                                <span>💬</span> Coordinate on WhatsApp
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-blue-200 rounded-xl p-3.5 text-center min-w-[170px] shadow-2xs">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">4-Digit Pickup PIN</div>
+                        <div class="text-2xl font-extrabold font-mono tracking-widest text-blue-700 my-1">${escapeHtml(post.pin)}</div>
+                        <div class="text-[10px] text-slate-500 mb-2.5">Verify PIN during handover</div>
+                        ${!isCompleted
+                            ? `<button type="button" onclick="markCompleted(${post.id})" class="w-full py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer">${actionBtnLabel}</button>`
+                            : `<span class="inline-block w-full py-1 px-2 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg">✓ Completed</span>`
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        function adminDeletePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            posts = posts.filter(p => p.id !== postId);
+            addLog(`[ADMIN MODERATION] Removed post #${post.id} ("${post.title}") [${post.category}]`);
+            showToast(`Admin removed post #${post.id}.`);
+            renderAdminView();
+        }
+
+        // =====================================================================
+        // RENDER INSTAGRAM-STYLE FEED CARD HTML
+        // =====================================================================
+        function buildInstaCardHtml(post, viewerRole) {
+            const isOffer = post.type === 'offer';
+            const pillarObj = PILLARS.find(x => x.id === post.category) || PILLARS[0];
+            const isMine = currentUser && post.postedByName === currentUser.name;
+            const isClaimedByMe = currentUser && post.claimedByName === currentUser.name;
+
+            const canClaim = post.status === 'Open' && !isMine && (
+                (viewerRole === 'needy' && post.type === 'offer') ||
+                (viewerRole === 'helper' && post.type === 'need')
+            );
+            const canInspectHandover = (isMine || isClaimedByMe) && post.status !== 'Open';
+
+            // Status Pill Overlay on Photo
+            let statusOverlay = `<span class="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-emerald-600/95 text-white shadow-sm">● Open</span>`;
+            if (post.status === 'In Progress') {
+                statusOverlay = `<span class="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-amber-500/95 text-slate-950 shadow-sm">⏳ In Progress</span>`;
+            } else if (post.status === 'Completed') {
+                statusOverlay = `<span class="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-slate-800/90 text-white shadow-sm">✓ Completed</span>`;
+            }
+
+            // Visual Media Content
+            const mediaHtml = post.photoType === 'dataurl'
+                ? `<img src="${post.photoContent}" alt="${escapeHtml(post.title)}" class="w-full h-full object-cover select-none">`
+                : `<div class="w-full h-full select-none">${post.photoContent}</div>`;
+
+            // Primary Action CTA
+            let actionCta = '';
+            if (canClaim) {
+                const label = viewerRole === 'needy' ? 'Claim Offer' : 'Fulfill Need';
+                const btnStyle = viewerRole === 'needy'
+                    ? 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+                    : 'bg-emerald-600 hover:bg-emerald-700 text-white';
+                actionCta = `<button type="button" onclick="claimItem(${post.id})" class="px-3.5 py-1.5 text-xs font-bold rounded-xl shadow-2xs transition-colors cursor-pointer ${btnStyle}">${label}</button>`;
+            } else if (canInspectHandover) {
+                const targetBox = viewerRole === 'needy' ? 'needyHandoverCard' : 'helperHandoverCard';
+                actionCta = `<button type="button" onclick="showHandoverCard(posts.find(x=>x.id===${post.id}), '${targetBox}', '${viewerRole}'); window.scrollTo({top:0,behavior:'smooth'});" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer">WhatsApp &amp; PIN</button>`;
+            } else if (isMine) {
+                actionCta = `<span class="text-[11px] font-semibold text-slate-400">Your Post</span>`;
+            } else {
+                actionCta = `<span class="text-[11px] font-medium text-slate-400">${escapeHtml(post.status)}</span>`;
+            }
+
+            const avatarBg = post.postedByRole === 'helper'
+                ? 'from-emerald-500 to-teal-600'
+                : 'from-amber-500 to-orange-600';
+
+            return `
+                <article class="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col justify-between fade-in">
+                    <div>
+                        <!-- Instagram Card Top Header -->
+                        <div class="px-4 py-3 flex items-center justify-between gap-2 border-b border-slate-100">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-9 h-9 rounded-full bg-gradient-to-tr ${avatarBg} text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                                    ${escapeHtml(post.postedByInitials)}
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-slate-900 truncate">${escapeHtml(post.postedByName)}</span>
+                                        <span class="px-1.5 py-0.2 text-[9px] font-bold uppercase rounded ${isOffer ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                            ${isOffer ? 'HELPER' : 'NEEDY'}
+                                        </span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-500 truncate">📍 ${escapeHtml(post.locality)} • ${escapeHtml(post.timeAgo)}</div>
+                                </div>
+                            </div>
+
+                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-full bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
+                                ${pillarObj.icon} ${pillarObj.label}
+                            </span>
+                        </div>
+
+                        <!-- Visual Photo Container (Double-Tap to Like) -->
+                        <div ondblclick="toggleLike(${post.id}, true)" title="Double-tap to appreciate" class="relative w-full h-52 bg-slate-100 overflow-hidden cursor-pointer group">
+                            ${mediaHtml}
+                            <!-- Top-Right Status Pill -->
+                            <div class="absolute top-3 right-3">
+                                ${statusOverlay}
+                            </div>
+                            <!-- Bottom-Left Quantity Pill -->
+                            <div class="absolute bottom-3 left-3">
+                                <span class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-900/80 text-white backdrop-blur-xs">
+                                    Qty: ${escapeHtml(post.quantity)}
+                                </span>
+                            </div>
+                            <!-- Double-Tap Center Heart Burst -->
+                            <div id="heartOverlay-${post.id}" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <span class="text-6xl drop-shadow-lg">❤️</span>
+                            </div>
+                        </div>
+
+                        <!-- Instagram Action Bar (Like + Claim/Fulfill) -->
+                        <div class="px-4 pt-3 pb-2 flex items-center justify-between gap-2">
+                            <button type="button" onclick="toggleLike(${post.id}, false)" class="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-xl border transition-colors cursor-pointer ${post.likedByMe ? 'bg-rose-50 text-rose-600 border-rose-200' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'}">
+                                <span class="${post.likedByMe ? 'animate-pop-like' : ''}">${post.likedByMe ? '❤️' : '🤍'}</span>
+                                <span>${post.likes}</span>
+                            </button>
+
+                            <div class="flex items-center gap-2">
+                                ${actionCta}
+                            </div>
+                        </div>
+
+                        <!-- Caption, Spec & Description -->
+                        <div class="px-4 pb-4 space-y-1.5">
+                            <h4 class="text-sm font-bold text-slate-900 leading-snug">
+                                ${escapeHtml(post.title)}
+                            </h4>
+                            <div class="text-[11px] font-semibold text-teal-700 bg-teal-50/80 border border-teal-100 px-2.5 py-1 rounded-lg inline-block">
+                                ${escapeHtml(post.extraSpec)}
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed pt-0.5">
+                                <strong class="text-slate-800">${escapeHtml(post.postedByName)}</strong> ${escapeHtml(post.description)}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer Metadata -->
+                    <div class="px-4 py-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                        <span>Post #${post.id} • ${isOffer ? 'Surplus Offer' : 'Community Need'}</span>
+                        <span>${post.claimedByName ? `Claimed by <strong class="text-indigo-700">${escapeHtml(post.claimedByName)}</strong>` : 'Awaiting match'}</span>
+                    </div>
+                </article>
+            `;
+        }
+
+        // =====================================================================
+        // RENDER NEEDY & HELPER VISUAL FEEDS
+        // =====================================================================
+        function filterNeedyNearby() {
+            const areaKeyword = (currentUser?.locality || 'Kothrud').split(',')[0].trim();
+            needyPillarFilter = 'All';
+            renderPillarFilterChips('needy');
+            document.getElementById('needySearch').value = areaKeyword;
+            renderNeedyView();
+            showToast(`Filtered feed to offers in ${areaKeyword}.`);
+        }
+
+        function renderNeedyView() {
+            if (!currentUser) return;
+            const areaKeyword = (currentUser.locality || 'Kothrud').split(',')[0].trim().toLowerCase();
+            const nearbyOffers = posts.filter(p =>
+                p.type === 'offer' &&
+                p.status === 'Open' &&
+                p.locality.toLowerCase().includes(areaKeyword)
+            );
+
+            const matchBanner = document.getElementById('needyMatchBanner');
+            const matchTitle = document.getElementById('needyMatchTitle');
+            const matchText = document.getElementById('needyMatchText');
+
+            if (nearbyOffers.length > 0) {
+                matchBanner.classList.remove('hidden');
+                matchTitle.textContent = `Sathi Smart Match in ${currentUser.locality}!`;
+                matchText.innerHTML = `${nearbyOffers.length} open Helper photo offer(s) available right now: ` +
+                    nearbyOffers.map(o => `<span class="underline font-semibold">#${o.id} ${escapeHtml(o.title)}</span>`).join(' • ');
+            } else {
+                matchBanner.classList.add('hidden');
+            }
+
+            const search = document.getElementById('needySearch').value.trim().toLowerCase();
+            const visible = posts.filter(p => {
+                const relevant = p.type === 'offer' || p.postedByName === currentUser.name;
+                const matchPillar = needyPillarFilter === 'All' || p.category === needyPillarFilter;
+                const matchSearch = !search ||
+                    p.title.toLowerCase().includes(search) ||
+                    p.locality.toLowerCase().includes(search) ||
+                    p.description.toLowerCase().includes(search);
+                return relevant && matchPillar && matchSearch;
+            });
+
+            const stream = document.getElementById('needyFeedStream');
+            stream.innerHTML = visible.map(p => buildInstaCardHtml(p, 'needy')).join('') ||
+                `<div class="col-span-full bg-white rounded-2xl border border-slate-200 p-10 text-center text-xs text-slate-400">No visual posts match your current filter.</div>`;
+        }
+
+        function filterHelperNearby() {
+            const areaKeyword = (currentUser?.locality || 'Kothrud').split(',')[0].trim();
+            helperPillarFilter = 'All';
+            renderPillarFilterChips('helper');
+            document.getElementById('helperSearch').value = areaKeyword;
+            renderHelperView();
+            showToast(`Filtered feed to neighbor needs in ${areaKeyword}.`);
+        }
+
+        function renderHelperView() {
+            if (!currentUser) return;
+            const areaKeyword = (currentUser.locality || 'Kothrud').split(',')[0].trim().toLowerCase();
+            const nearbyNeeds = posts.filter(p =>
+                p.type === 'need' &&
+                p.status === 'Open' &&
+                p.locality.toLowerCase().includes(areaKeyword)
+            );
+
+            const matchBanner = document.getElementById('helperMatchBanner');
+            const matchTitle = document.getElementById('helperMatchTitle');
+            const matchText = document.getElementById('helperMatchText');
+
+            if (nearbyNeeds.length > 0) {
+                matchBanner.classList.remove('hidden');
+                matchTitle.textContent = `Neighbors Seeking Help Nearby in ${currentUser.locality}`;
+                matchText.innerHTML = `${nearbyNeeds.length} neighbor(s) need assistance right now: ` +
+                    nearbyNeeds.map(n => `<span class="underline font-semibold">${escapeHtml(n.postedByName)} needs "${escapeHtml(n.title)}"</span>`).join(' • ');
+            } else {
+                matchBanner.classList.add('hidden');
+            }
+
+            const search = document.getElementById('helperSearch').value.trim().toLowerCase();
+            const visible = posts.filter(p => {
+                const relevant = p.type === 'need' || p.postedByName === currentUser.name;
+                const matchPillar = helperPillarFilter === 'All' || p.category === helperPillarFilter;
+                const matchSearch = !search ||
+                    p.title.toLowerCase().includes(search) ||
+                    p.locality.toLowerCase().includes(search) ||
+                    p.description.toLowerCase().includes(search);
+                return relevant && matchPillar && matchSearch;
+            });
+
+            const stream = document.getElementById('helperFeedStream');
+            stream.innerHTML = visible.map(p => buildInstaCardHtml(p, 'helper')).join('') ||
+                `<div class="col-span-full bg-white rounded-2xl border border-slate-200 p-10 text-center text-xs text-slate-400">No visual posts match your current filter.</div>`;
+        }
+
+        // =====================================================================
+        // RENDER ADMIN MONITORING DASHBOARD
+        // =====================================================================
+        function renderAdminView() {
+            const baseHelped = 26;
+            const liveHelpedPosts = posts.filter(p => p.status === 'Completed' || p.status === 'In Progress');
+            const completedCount = posts.filter(p => p.status === 'Completed').length;
+            const inProgressCount = posts.filter(p => p.status === 'In Progress').length;
+
+            const totalHelped = baseHelped + liveHelpedPosts.length;
+            const openNeeds = posts.filter(p => p.type === 'need' && p.status === 'Open').length;
+            const openOffers = posts.filter(p => p.type === 'offer' && p.status === 'Open').length;
+            const totalMembers = MEMBER_STATS.needyCount + MEMBER_STATS.helperCount;
+
+            document.getElementById('kpiPeopleHelped').textContent = totalHelped;
+            document.getElementById('kpiHelpedBreakdown').textContent = `${baseHelped} prior + ${completedCount} completed, ${inProgressCount} active`;
+            document.getElementById('kpiOpenNeeds').textContent = openNeeds;
+            document.getElementById('kpiOpenOffers').textContent = openOffers;
+            document.getElementById('kpiTotalMembers').textContent = totalMembers;
+            document.getElementById('kpiMembersSplit').textContent = `${MEMBER_STATS.needyCount} Needy • ${MEMBER_STATS.helperCount} Helpers`;
+
+            const baselineByPillar = {
+                'FoodShare': 12,
+                'EduBridge': 5,
+                'NeedNotWaste': 4,
+                'CareConnect': 3,
+                'HelpHub': 2
+            };
+
+            const counts = PILLARS.map(p => {
+                const liveCount = liveHelpedPosts.filter(item => item.category === p.id).length;
+                return {
+                    label: `${p.icon} ${p.label}`,
+                    total: (baselineByPillar[p.id] || 0) + liveCount,
+                    liveCount
+                };
+            });
+
+            const maxVal = Math.max(1, ...counts.map(c => c.total));
+            document.getElementById('categoryBarsContainer').innerHTML = counts.map(item => {
+                const pct = Math.round((item.total / maxVal) * 100);
+                return `
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="font-semibold text-slate-700">${escapeHtml(item.label)}</span>
+                            <span class="font-bold text-slate-900">${item.total} helped ${item.liveCount > 0 ? `<span class="text-emerald-600 text-[11px]">(+${item.liveCount} live)</span>` : ''}</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
+                            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const statusFilter = document.getElementById('adminFilterStatus').value;
+            const catFilter = document.getElementById('adminFilterCat').value;
+
+            const filteredPosts = posts.filter(p => {
+                const matchStatus = statusFilter === 'All' || p.status === statusFilter;
+                const matchCat = catFilter === 'All' || p.category === catFilter;
+                return matchStatus && matchCat;
+            });
+
+            document.getElementById('adminTableBody').innerHTML = filteredPosts.map(p => {
+                const isOffer = p.type === 'offer';
+                const pillarObj = PILLARS.find(x => x.id === p.category) || PILLARS[0];
+                const thumbHtml = p.photoType === 'dataurl'
+                    ? `<img src="${p.photoContent}" alt="Thumb" class="w-12 h-9 object-cover rounded-lg border border-slate-200">`
+                    : `<div class="w-12 h-9 rounded-lg overflow-hidden border border-slate-200">${p.photoContent}</div>`;
+
+                return `<tr class="hover:bg-slate-50">
+                    <td class="py-3 px-3 font-mono text-xs text-slate-500">#${p.id}</td>
+                    <td class="py-3 px-3">${thumbHtml}</td>
+                    <td class="py-3 px-3">
+                        <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-full border ${isOffer ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}">
+                            ${isOffer ? 'OFFER' : 'NEED'}
+                        </span>
+                    </td>
+                    <td class="py-3 px-3 max-w-[210px]">
+                        <div class="font-semibold text-slate-800">${escapeHtml(p.title)}</div>
+                        <div class="text-[11px] text-slate-500">${escapeHtml(p.quantity)} • ${escapeHtml(p.extraSpec)}</div>
+                    </td>
+                    <td class="py-3 px-3 text-xs font-medium text-slate-700 whitespace-nowrap">${pillarObj.icon} ${escapeHtml(p.category)}</td>
+                    <td class="py-3 px-3 text-xs text-slate-600 whitespace-nowrap">${escapeHtml(p.locality)}</td>
+                    <td class="py-3 px-3 text-xs text-slate-700 whitespace-nowrap">${escapeHtml(p.postedByName)}</td>
+                    <td class="py-3 px-3 text-xs whitespace-nowrap ${p.claimedByName ? 'text-indigo-700 font-semibold' : 'text-slate-400 italic'}">${escapeHtml(p.claimedByName || 'Unclaimed')}</td>
+                    <td class="py-3 px-3 whitespace-nowrap">${renderStatusBadge(p.status)}</td>
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
+                        <button type="button" onclick="adminDeletePost(${p.id})" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer">
+                            Remove
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('') || `<tr><td colspan="10" class="py-8 text-center text-xs text-slate-400">No posts match the selected filters.</td></tr>`;
+
+            renderAuditLogList();
+        }
+
+        // =====================================================================
+        // SHARED UTILITIES
+        // =====================================================================
+        function renderStatusBadge(status) {
+            if (status === 'Open') {
+                return `<span class="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-blue-50 text-blue-700 border border-blue-200">Open</span>`;
+            }
+            if (status === 'In Progress') {
+                return `<span class="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-amber-100 text-amber-800 border border-amber-200">In Progress</span>`;
+            }
+            return `<span class="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">Completed</span>`;
+        }
+
+        function addLog(message) {
+            const time = new Date().toTimeString().split(' ')[0];
+            auditLogs.unshift({ time, message });
+            if (currentUser?.role === 'admin') renderAuditLogList();
+        }
+
+        function renderAuditLogList() {
+            const list = document.getElementById('adminAuditLogList');
+            const counter = document.getElementById('adminLogCounter');
+            counter.textContent = `${auditLogs.length} event${auditLogs.length === 1 ? '' : 's'}`;
+            list.innerHTML = auditLogs.map(item => `
+                <div class="border-b border-slate-800/80 pb-1.5 leading-relaxed">
+                    <span class="text-slate-500">[${item.time}]</span> ${escapeHtml(item.message)}
+                </div>
+            `).join('');
+        }
+
+        function showToast(message, isError = false) {
+            const container = document.getElementById('toastContainer');
+            const icon = document.getElementById('toastIcon');
+            const text = document.getElementById('toastText');
+
+            text.textContent = message;
+            icon.textContent = isError ? '⚠' : '✓';
+            icon.className = isError ? 'text-amber-400 font-bold text-base' : 'text-emerald-400 font-bold text-base';
+
+            container.classList.remove('hidden');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                container.classList.add('hidden');
+            }, 3800);
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+    </script>
 </body>
 </html>
