@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sathi Demo — Share What You Can. Support Who Needs.</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --emerald: #059669;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); }
+    nav {
+      background: #fff; border-bottom: 1px solid var(--border); padding: 12px 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+      position: sticky; top: 0; z-index: 20;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .container { max-width: 1200px; margin: 22px auto; padding: 0 16px; }
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: #fff; border-radius: 16px; padding: 36px 28px; margin-bottom: 22px;
+      display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; align-items: center;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: 32px; line-height: 1.2; }
+    .hero p { color: #cbd5e1; margin: 0 0 18px; line-height: 1.6; }
+    .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 22px; }
+    .pillar { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+    .pillar h3 { margin: 0 0 6px; font-size: 15px; }
+    .pillar p { margin: 0; font-size: 12.5px; color: var(--muted); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(15,23,42,0.04); }
+    .dash-grid { display: grid; grid-template-columns: 330px 1fr; gap: 18px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .kpi { background: #fff; border: 1px solid var(--border); border-left: 5px solid var(--primary); border-radius: 10px; padding: 14px; }
+    .kpi .num { font-size: 26px; font-weight: 800; margin-top: 4px; }
+    input, select, textarea, button { padding: 8px 11px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13.5px; font-family: inherit; }
+    textarea { width: 100%; }
+    button { background: var(--primary); color: #fff; border: none; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    button.emerald { background: var(--emerald); }
+    button.emerald:hover { background: #047857; }
+    button.secondary { background: #475569; }
+    button.danger { background: #dc2626; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: left; font-size: 13px; }
+    th { background: #f1f5f9; }
+    .badge { padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; display: inline-block; }
+    .b-offer { background: #dcfce7; color: #166534; }
+    .b-need { background: #fef3c7; color: #92400e; }
+    .b-open { background: #dbeafe; color: #1e40af; }
+    .b-prog { background: #ffedd5; color: #9a3412; }
+    .b-done { background: #e2e8f0; color: #334155; }
+    .wa-box { background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 14px; margin-top: 14px; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.55); display: flex; align-items: center; justify-content: center; z-index: 50; }
+    .modal-card { background: #fff; border-radius: 14px; padding: 22px; max-width: 440px; width: 92%; }
+    .hidden { display: none !important; }
+    @media (max-width: 880px) { .hero, .dash-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="brand" onclick="showView('homeView')">
+      <svg width="36" height="36" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="12" fill="#EFF6FF"/>
+        <path d="M14 27C14 21 20 17 24 22C28 17 34 21 34 27C34 33 24 38 24 38C24 38 14 33 14 27Z" fill="#059669"/>
+        <path d="M11 25C11 18 17 14 24 14C31 14 37 18 37 25" stroke="#1E3A8A" stroke-width="3.2" stroke-linecap="round"/>
+        <circle cx="24" cy="11" r="3" fill="#F59E0B"/>
+      </svg>
+      <div>
+        <div style="font-size:19px; font-weight:800; color:#1e3a8a;">Sathi</div>
+        <div style="font-size:11px; color:#64748b;">Share What You Can. Support Who Needs.</div>
+      </div>
+    </div>
+
+    <div id="guestNav" style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="secondary" onclick="showView('homeView')">Home</button>
+      <button onclick="openWaModal()">WhatsApp Alert Demo</button>
+      <button onclick="showView('authView')">Login / Register</button>
+      <button class="emerald" onclick="quickDemoLogin('Needy')">Demo: Needy</button>
+      <button onclick="quickDemoLogin('Helper')">Demo: Helper</button>
+      <button class="secondary" onclick="quickDemoLogin('Admin')">Demo: Admin</button>
+    </div>
+
+    <div id="userNav" class="hidden" style="display:flex; gap:10px; align-items:center;">
+      <span id="navRole" class="badge b-open"></span>
+      <strong id="navName"></strong>
+      <button class="secondary" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- HOME VIEW -->
+    <div id="homeView">
+      <div class="hero">
+        <div>
+          <span class="badge b-offer" style="margin-bottom:10px;">Student Interactive Demo</span>
+          <h1>Share What You Can.<br>Support Who Needs.</h1>
+          <p>
+            Sathi helps neighbors share surplus food (such as <strong>2 plates of rice left over from an event</strong>),
+            study books, clothes, elderly care, and urgent help with people nearby.
+          </p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="emerald" onclick="goAuthRole('Needy')">Sign Up / Login as Needy</button>
+            <button onclick="goAuthRole('Helper')">Sign Up / Login as Helper</button>
+            <button class="secondary" onclick="goAuthRole('Admin')">Open Admin Monitor</button>
+          </div>
+        </div>
+
+        <div class="wa-box" style="color:#064e3b; margin-top:0;">
+          <h3 style="margin:0 0 8px;">How Sathi Works with WhatsApp</h3>
+          <p style="font-size:13px; margin:0 0 10px; color:#065f46;">
+            When a Helper posts surplus food or a Needy user claims an item, Sathi alerts nearby members on WhatsApp
+            and generates a <strong>4-digit Pickup PIN</strong> so handovers stay safe and quick.
+          </p>
+          <button class="emerald" onclick="openWaModal()">Preview Live WhatsApp Alert</button>
+        </div>
+      </div>
+
+      <h2 style="margin:0 0 12px;">Five Sathi Community Pillars</h2>
+      <div class="pillars">
+        <div class="pillar"><h3>🍱 FoodShare</h3><p>Extra food share karne — leftover event food & fresh meals.</p></div>
+        <div class="pillar"><h3>📚 EduBridge</h3><p>Books ani study material share karne — textbooks, notes & kits.</p></div>
+        <div class="pillar"><h3>👕 NeedNotWaste</h3><p>Clothes ani useful items donate karne — clean clothes & essentials.</p></div>
+        <div class="pillar"><h3>👵 CareConnect</h3><p>Elderly lokanna basic assistance — errands, medicine & support.</p></div>
+        <div class="pillar"><h3>🤝 HelpHub</h3><p>General help requests — medicines, bill support & urgent aid.</p></div>
+      </div>
+    </div>
+
+    <!-- AUTH VIEW -->
+    <div id="authView" class="hidden">
+      <div class="card" style="max-width:430px; margin:24px auto;">
+        <h2 style="margin-top:0;">Login / Register — Sathi</h2>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <input id="loginName" type="text" placeholder="Your Name (e.g., Priya, Rohan, or Admin)" />
+          <select id="loginRole">
+            <option value="Needy">Needy (Post needs & claim offers)</option>
+            <option value="Helper">Helper / Donor (Post surplus food/items & help)</option>
+            <option value="Admin">Admin (Monitor community impact)</option>
+          </select>
+          <input id="loginLocality" type="text" placeholder="Area / Locality (e.g., Kothrud, Pune)" value="Kothrud, Pune" />
+          <input id="loginPhone" type="text" placeholder="Phone / WhatsApp (e.g., 9876543210)" value="9876543210" />
+          <button class="emerald" onclick="enterDashboard()">Continue to My Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEEDY & HELPER DASHBOARD -->
+    <div id="userDashView" class="hidden">
+      <div class="dash-grid">
+        <div class="card">
+          <h3 id="formHeading" style="margin-top:0;">Post to Sathi</h3>
+          <div style="display:flex; flex-direction:column; gap:9px;">
+            <select id="postPillar">
+              <option value="FoodShare">🍱 FoodShare</option>
+              <option value="EduBridge">📚 EduBridge</option>
+              <option value="NeedNotWaste">👕 NeedNotWaste</option>
+              <option value="CareConnect">👵 CareConnect</option>
+              <option value="HelpHub">🤝 HelpHub</option>
+            </select>
+            <input id="postTitle" type="text" placeholder="e.g., 2 plates of rice remaining from event" />
+            <input id="postQty" type="text" placeholder="Quantity (e.g., 2 plates, 1 set)" />
+            <input id="postSpec" type="text" placeholder="Spec (Veg/Non-Veg, Size, Valid Till)" />
+            <input id="postLocality" type="text" placeholder="Area / Locality" />
+            <input id="postContact" type="text" placeholder="WhatsApp / Pickup Landmark" />
+            <textarea id="postDesc" rows="3" placeholder="Short description..."></textarea>
+            <button id="btnPost" class="emerald" onclick="addPost()">Publish Post</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h3 style="margin:0;">Community Posts</h3>
+            <select id="filterPillar" onchange="renderUserTable()">
+              <option value="All">All Pillars</option>
+              <option value="FoodShare">🍱 FoodShare</option>
+              <option value="EduBridge">📚 EduBridge</option>
+              <option value="NeedNotWaste">👕 NeedNotWaste</option>
+              <option value="CareConnect">👵 CareConnect</option>
+              <option value="HelpHub">🤝 HelpHub</option>
+            </select>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Type</th><th>Pillar</th><th>Title & Spec</th><th>Qty</th><th>Area</th><th>By</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="userTbody"></tbody>
+          </table>
+
+          <div id="handoverCard" class="wa-box hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminDashView" class="hidden">
+      <div class="kpi-grid">
+        <div class="kpi" style="border-left-color:#059669;"><div>Total People Helped</div><div class="num" id="kHelped">0</div></div>
+        <div class="kpi" style="border-left-color:#d97706;"><div>Open Needs Waiting</div><div class="num" id="kNeeds">0</div></div>
+        <div class="kpi" style="border-left-color:#2563eb;"><div>Active Helper Offers</div><div class="num" id="kOffers">0</div></div>
+        <div class="kpi" style="border-left-color:#7c3aed;"><div>Total Posts</div><div class="num" id="kTotal">0</div></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 8px;">Admin Monitoring — All Sathi Posts</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th><th>Type</th><th>Pillar</th><th>Title</th><th>Qty</th><th>Area</th><th>Posted By</th><th>Claimed By</th><th>Status</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHATSAPP MODAL -->
+  <div id="waModal" class="modal-backdrop hidden" onclick="closeWaModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3 style="margin:0 0 8px; color:#065f46;">Sathi WhatsApp Coordination Alert</h3>
+      <p style="font-size:13.5px; background:#ecfdf5; padding:12px; border-radius:8px; border:1px solid #6ee7b7;">
+        <strong>🍱 FoodShare Alert (Kothrud, Pune):</strong><br>
+        Helper <strong>Rohan</strong> posted <strong>2 plates of veg rice</strong> from a family event (Pickup before 10:30 PM).<br><br>
+        Once claimed by a Needy user, Sathi shares the pickup landmark and 4-digit PIN <strong>#4829</strong>.
+      </p>
+      <button onclick="closeWaModal()" style="width:100%;">Close Preview</button>
+    </div>
+  </div>
+
+  <script>
+    let currentUser = null;
+    let posts = [
+      { id: 101, type: "Offer", pillar: "FoodShare", title: "2 plates of veg rice from family event", qty: "2 plates", spec: "Pure Veg • Valid till 10:30 PM", locality: "Kothrud, Pune", contact: "9123456789 - Gate No 2", by: "Rohan (Helper)", claimedBy: "-", pin: "4829", status: "Open" },
+      { id: 102, type: "Need", pillar: "EduBridge", title: "Need Class 10 Science & Maths books", qty: "1 set", spec: "Study Material", locality: "Kothrud, Pune", contact: "9876543210 - Near Depot", by: "Priya (Needy)", claimedBy: "-", pin: "7314", status: "Open" },
+      { id: 103, type: "Offer", pillar: "NeedNotWaste", title: "2 clean jackets & school bag", qty: "3 items", spec: "Size M • Washed", locality: "Kothrud, Pune", contact: "9123456789", by: "Rohan (Helper)", claimedBy: "Priya (Needy)", pin: "5190", status: "Completed" }
+    ];
+    let nextId = 104;
+
+    function showView(id) {
+      ["homeView", "authView", "userDashView", "adminDashView"].forEach(v => document.getElementById(v).classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    function openWaModal() { document.getElementById("waModal").classList.remove("hidden"); }
+    function closeWaModal() { document.getElementById("waModal").classList.add("hidden"); }
+
+    function goAuthRole(role) {
+      document.getElementById("loginRole").value = role;
+      showView("authView");
+    }
+
+    function quickDemoLogin(role) {
+      currentUser = {
+        name: role === "Helper" ? "Rohan K." : role === "Admin" ? "Sathi Admin" : "Priya S.",
+        role,
+        locality: "Kothrud, Pune",
+        phone: "9876543210"
+      };
+      activateSession();
+    }
+
+    function enterDashboard() {
+      const name = document.getElementById("loginName").value.trim() || "Demo User";
+      currentUser = {
+        name,
+        role: document.getElementById("loginRole").value,
+        locality: document.getElementById("loginLocality").value.trim() || "Kothrud, Pune",
+        phone: document.getElementById("loginPhone").value.trim() || "9876543210"
+      };
+      activateSession();
+    }
+
+    function activateSession() {
+      document.getElementById("guestNav").classList.add("hidden");
+      document.getElementById("userNav").classList.remove("hidden");
+      document.getElementById("navRole").textContent = currentUser.role.toUpperCase();
+      document.getElementById("navName").textContent = currentUser.name;
+
+      if (currentUser.role === "Admin") {
+        renderAdmin();
+        showView("adminDashView");
+      } else {
+        const isHelper = currentUser.role === "Helper";
+        document.getElementById("formHeading").textContent = isHelper ? "Helper: Post Surplus / Offer" : "Needy: Post Your Need";
+        document.getElementById("btnPost").textContent = isHelper ? "Publish Offer" : "Submit Need";
+        document.getElementById("postLocality").value = currentUser.locality;
+        document.getElementById("postContact").value = currentUser.phone;
+        renderUserTable();
+        showView("userDashView");
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("userNav").classList.add("hidden");
+      document.getElementById("guestNav").classList.remove("hidden");
+      showView("homeView");
+    }
+
+    function addPost() {
+      const title = document.getElementById("postTitle").value.trim();
+      const qty = document.getElementById("postQty").value.trim() || "1";
+      const locality = document.getElementById("postLocality").value.trim();
+      if (!title || !locality) return alert("Enter Title and Area/Locality.");
+
+      posts.unshift({
+        id: nextId++,
+        type: currentUser.role === "Helper" ? "Offer" : "Need",
+        pillar: document.getElementById("postPillar").value,
+        title,
+        qty,
+        spec: document.getElementById("postSpec").value.trim() || "General",
+        locality,
+        contact: document.getElementById("postContact").value.trim() || currentUser.phone,
+        by: `${currentUser.name} (${currentUser.role})`,
+        claimedBy: "-",
+        pin: String(Math.floor(1000 + Math.random() * 9000)),
+        status: "Open"
+      });
+      document.getElementById("postTitle").value = "";
+      document.getElementById("postQty").value = "";
+      document.getElementById("postSpec").value = "";
+      document.getElementById("postDesc").value = "";
+      renderUserTable();
+    }
+
+    function renderUserTable() {
+      const filter = document.getElementById("filterPillar").value;
+      const isHelper = currentUser.role === "Helper";
+      const list = posts.filter(p => filter === "All" || p.pillar === filter);
+
+      document.getElementById("userTbody").innerHTML = list.map(p => {
+        const canClaim = p.status === "Open" && ((isHelper && p.type === "Need") || (!isHelper && p.type === "Offer"));
+        const canComplete = p.status === "In Progress";
+        const canPin = p.status !== "Open";
+
+        return `<tr>
+          <td>#${p.id}</td>
+          <td><span class="badge ${p.type === "Offer" ? "b-offer" : "b-need"}">${p.type}</span></td>
+          <td>${p.pillar}</td>
+          <td><strong>${p.title}</strong><br><small style="color:#64748b">${p.spec}</small></td>
+          <td>${p.qty}</td>
+          <td>${p.locality}</td>
+          <td>${p.by}</td>
+          <td><span class="badge ${p.status === "Open" ? "b-open" : p.status === "In Progress" ? "b-prog" : "b-done"}">${p.status}</span></td>
+          <td style="display:flex; gap:5px; flex-wrap:wrap;">
+            ${canClaim ? `<button class="emerald" onclick="claim(${p.id})">${isHelper ? "Fulfill" : "Claim"}</button>` : ""}
+            ${canPin ? `<button class="secondary" onclick="showHandover(${p.id})">PIN</button>` : ""}
+            ${canComplete ? `<button onclick="complete(${p.id})">Done</button>` : ""}
+          </td>
+        </tr>`;
+      }).join("");
+    }
+
+    function claim(id) {
+      const p = posts.find(x => x.id === id);
+      if (!p) return;
+      p.status = "In Progress";
+      p.claimedBy = `${currentUser.name} (${currentUser.role})`;
+      renderUserTable();
+      showHandover(id);
+    }
+
+    function complete(id) {
+      const p = posts.find(x => x.id === id);
+      if (!p) return;
+      p.status = "Completed";
+      renderUserTable();
+    }
+
+    function showHandover(id) {
+      const p = posts.find(x => x.id === id);
+      if (!p) return;
+      const box = document.getElementById("handoverCard");
+      box.classList.remove("hidden");
+      box.innerHTML = `
+        <strong>Handover Details Unlocked — #${p.id} (${p.title})</strong><br>
+        • <strong>Area / Landmark:</strong> ${p.locality}<br>
+        • <strong>Contact:</strong> ${p.contact}<br>
+        • <strong>4-Digit Pickup PIN:</strong> <span class="badge b-open" style="font-size:13px;">${p.pin}</span>
+      `;
+    }
+
+    function renderAdmin() {
+      const helped = posts.filter(p => p.status === "In Progress" || p.status === "Completed").length;
+      const openNeeds = posts.filter(p => p.type === "Need" && p.status === "Open").length;
+      const openOffers = posts.filter(p => p.type === "Offer" && p.status === "Open").length;
+
+      document.getElementById("kHelped").textContent = helped;
+      document.getElementById("kNeeds").textContent = openNeeds;
+      document.getElementById("kOffers").textContent = openOffers;
+      document.getElementById("kTotal").textContent = posts.length;
+
+      document.getElementById("adminTbody").innerHTML = posts.map(p => `<tr>
+        <td>#${p.id}</td>
+        <td><span class="badge ${p.type === "Offer" ? "b-offer" : "b-need"}">${p.type}</span></td>
+        <td>${p.pillar}</td>
+        <td>${p.title}</td>
+        <td>${p.qty}</td>
+        <td>${p.locality}</td>
+        <td>${p.by}</td>
+        <td>${p.claimedBy}</td>
+        <td>${p.status}</td>
+        <td><button class="danger" onclick="removePost(${p.id})">Delete</button></td>
+      </tr>`).join("");
+    }
+
+    function removePost(id) {
+      posts = posts.filter(x => x.id !== id);
+      renderAdmin();
+    }
+  </script>
+</body>
+</html>
